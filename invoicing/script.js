@@ -247,3 +247,45 @@ function generateInvoice() {
         alert('Error generating invoice: ' + err.message);
     });
 }
+
+// Mobile Scaling Logic
+function adjustInvoiceScale() {
+    const invoice = document.getElementById('invoice-capture');
+    // The wrapper is the direct parent of invoice-capture
+    const wrapper = invoice.parentElement;
+    const width = window.innerWidth;
+    const standardWidth = 794; // Invoice fixed width
+    const padding = 32; // Body padding (approx)
+
+    if (width < standardWidth + padding) {
+        // Calculate scale needed to fit width
+        const scale = (width - padding) / standardWidth;
+
+        // Apply scale
+        invoice.style.transform = `scale(${scale})`;
+        invoice.style.transformOrigin = 'top left';
+
+        // Adjust wrapper dimensions to fit scaled content
+        // Height needs adjustment because scale doesn't affect flow layout
+        wrapper.style.height = `${invoice.scrollHeight * scale}px`;
+        wrapper.style.width = `${standardWidth * scale}px`;
+        wrapper.style.overflow = 'hidden'; // Hide original overflow
+    } else {
+        // Reset Scaling for Desktop
+        invoice.style.transform = 'none';
+        wrapper.style.height = ''; // Auto
+        wrapper.style.width = '100%'; // Full width container
+        wrapper.style.overflow = 'auto'; // allow scroll if needed on large screens
+    }
+}
+
+// Add listeners for scaling
+window.addEventListener('load', adjustInvoiceScale);
+window.addEventListener('resize', adjustInvoiceScale);
+// Also adjust when template switches as content height might change
+const originalSwitchTemplate = switchTemplate;
+switchTemplate = function (templateId) {
+    originalSwitchTemplate(templateId);
+    setTimeout(adjustInvoiceScale, 50); // Small delay for DOM updates
+};
+

@@ -1,14 +1,21 @@
 /* Fonts */
+html {
+    -webkit-text-size-adjust: 100%;
+    /* Prevent font scaling in landscape on iOS */
+}
+
 .font-serif {
     font-family: 'DM Serif Display', serif;
 }
+
 .font-karla {
     font-family: 'Karla', sans-serif;
 }
 
 /* Invoice Container Dimension (A4 Ratio approximately) */
 .invoice-container {
-    width: 794px; /* A4 width at 96dpi */
+    width: 794px;
+    /* A4 width at 96dpi */
     /* height: 1123px;  Let height grow naturally or fix it if strict A4 is needed */
     min-height: 1123px;
     margin: 0 auto;
@@ -18,14 +25,15 @@
 /* Print/Canvas Specifics */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 /* Table styling for lines */
 #invoiceItems tr {
     border-bottom: 1px solid #D6Cbb3;
 }
+
 #invoiceItems td {
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -40,7 +48,8 @@ input[type="number"]::-webkit-outer-spin-button {
     border: none;
     width: 100%;
     font-family: 'DM Serif Display', serif;
-    font-size: 1.125rem; /* text-lg */
+    font-size: 1.125rem;
+    /* text-lg */
     color: #5A4A3A;
     font-weight: bold;
     cursor: pointer;
@@ -51,11 +60,13 @@ input[type="number"]::-webkit-outer-spin-button {
     background-size: 0.65em auto;
     padding-right: 1.25em;
 }
+
 .item-select:focus {
     outline: none;
 }
 
 /* Placeholder Graphics Styling (if regular images fail or for fallback) */
 .decoration-area img {
-    filter: sepia(0.3) saturate(0.8); /* Blend with beige theme */
+    filter: sepia(0.3) saturate(0.8);
+    /* Blend with beige theme */
 }

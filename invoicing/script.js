@@ -251,15 +251,18 @@ function generateInvoice() {
 // Mobile Scaling Logic
 function adjustInvoiceScale() {
     const invoice = document.getElementById('invoice-capture');
+    if (!invoice) return;
+
     // The wrapper is the direct parent of invoice-capture
     const wrapper = invoice.parentElement;
-    const width = window.innerWidth;
+    const width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
     const standardWidth = 794; // Invoice fixed width
     const padding = 32; // Body padding (approx)
 
     if (width < standardWidth + padding) {
         // Calculate scale needed to fit width
-        const scale = (width - padding) / standardWidth;
+        // Use 0.98 factor to ensure safe margin and prevent rounding jitter
+        const scale = ((width - padding) / standardWidth) * 0.98;
 
         // Apply scale
         invoice.style.transform = `scale(${scale})`;
@@ -267,7 +270,9 @@ function adjustInvoiceScale() {
 
         // Adjust wrapper dimensions to fit scaled content
         // Height needs adjustment because scale doesn't affect flow layout
-        wrapper.style.height = `${invoice.scrollHeight * scale}px`;
+        if (invoice.scrollHeight > 0) {
+            wrapper.style.height = `${invoice.scrollHeight * scale}px`;
+        }
         wrapper.style.width = `${standardWidth * scale}px`;
         wrapper.style.overflow = 'hidden'; // Hide original overflow
     } else {
@@ -279,13 +284,29 @@ function adjustInvoiceScale() {
     }
 }
 
+// Robust Initialization
+function initScaling() {
+    adjustInvoiceScale();
+    // Multiple checks for mobile loading states
+    setTimeout(adjustInvoiceScale, 100);
+    setTimeout(adjustInvoiceScale, 300);
+}
+
 // Add listeners for scaling
-window.addEventListener('load', adjustInvoiceScale);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScaling);
+} else {
+    initScaling();
+}
+window.addEventListener('load', initScaling);
 window.addEventListener('resize', adjustInvoiceScale);
+window.addEventListener('orientationchange', function () {
+    setTimeout(adjustInvoiceScale, 100);
+});
+
 // Also adjust when template switches as content height might change
 const originalSwitchTemplate = switchTemplate;
 switchTemplate = function (templateId) {
     originalSwitchTemplate(templateId);
     setTimeout(adjustInvoiceScale, 50); // Small delay for DOM updates
 };
-

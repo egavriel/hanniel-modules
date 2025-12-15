@@ -1,9 +1,60 @@
 let masterData = {}; // Will be populated from CSV
+let currentTemplate = 'christmas'; // Track current template for item filtering
+
+// Template Configurations
+const templates = {
+    "christmas": {
+        name: "Christmas 2025",
+        background: (typeof christmasBgBase64 !== 'undefined') ? `url('${christmasBgBase64}')` : "url('invoice_bg.png')",
+        textColor: "#5A4A3A"
+    },
+    "hanniel": {
+        name: "Little Hanniel",
+        background: (typeof hannielBgBase64 !== 'undefined') ? `url('${hannielBgBase64}')` : "url('invoice_bg_hanniel.png')",
+        textColor: "#000000"
+    }
+};
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadMasterData();
+    switchTemplate('christmas'); // Default template
 });
+
+function switchTemplate(templateId) {
+    currentTemplate = templateId;
+    const config = templates[templateId];
+    if (!config) return;
+
+    const captureArea = document.getElementById('invoice-capture');
+
+    // Update background
+    if (config.background.startsWith('url')) {
+        captureArea.style.backgroundImage = config.background;
+        captureArea.style.backgroundColor = 'transparent';
+    } else {
+        captureArea.style.backgroundImage = 'none';
+        captureArea.style.backgroundColor = config.background;
+    }
+
+    // Update text color
+    captureArea.style.color = config.textColor;
+
+    // Toggle INVOICE header visibility & Spacing
+    const invoiceHeader = document.getElementById('invoice-header');
+    const headerSection = document.getElementById('header-section');
+
+    if (templateId === 'hanniel') {
+        invoiceHeader.style.visibility = 'hidden';
+        // Increase spacing for Little Hanniel template
+        // ADJUST HEADER SPACING HERE (default is usually around 48px/3rem)
+        headerSection.style.marginBottom = '150px';
+    } else {
+        invoiceHeader.style.visibility = 'visible';
+        headerSection.style.marginBottom = ''; // Reverts to CSS default (mb-12)
+    }
+    updateAllDropdowns();
+}
 
 function loadMasterData() {
     fetch('master_data.csv')
@@ -17,8 +68,16 @@ function loadMasterData() {
             console.error('Error loading master data:', error);
             // Fallback default data if fetch fails (e.g. local file system without server)
             masterData = {
-                "Ètoile one": 149000,
-                "Ètoile duo": 349000
+                "Etoile one": { price: 149000, template: 'christmas' },
+                "Etoile duo": { price: 349000, template: 'christmas' },
+                "Etoile four": { price: 599000, template: 'christmas' },
+                "Christmas Hampers Tin": { price: 159000, template: 'christmas' },
+                "Double choco oat": { price: 70000, template: 'hanniel' },
+                "Raisin oat": { price: 70000, template: 'hanniel' },
+                "Almond choco oat": { price: 70000, template: 'hanniel' },
+                "Strawberry overnight oats": { price: 38000, template: 'hanniel' },
+                "Double choco overnight oats": { price: 38000, template: 'hanniel' },
+                "Tiramisu overnight oats": { price: 38000, template: 'hanniel' }
             };
             updateAllDropdowns();
             addItemRow();
@@ -35,17 +94,17 @@ function parseCSV(text) {
         const line = lines[i].trim();
         if (!line) continue;
 
-        // Simple CSV parse assuming "Name,Price" structure
-        // Handle cases where name might contain comma? For simple case start with splitting by last comma
-        const lastCommaIndex = line.lastIndexOf(',');
-        if (lastCommaIndex === -1) continue;
+        // Parse Name,Price,Template
+        const parts = line.split(',');
+        if (parts.length >= 3) {
+            const template = parts[parts.length - 1].trim();
+            const priceStr = parts[parts.length - 2].trim();
+            const name = parts.slice(0, parts.length - 2).join(',').trim();
+            const price = parseFloat(priceStr);
 
-        const name = line.substring(0, lastCommaIndex).trim();
-        const priceStr = line.substring(lastCommaIndex + 1).trim();
-        const price = parseFloat(priceStr);
-
-        if (name && !isNaN(price)) {
-            masterData[name] = price;
+            if (name && !isNaN(price)) {
+                masterData[name] = { price, template };
+            }
         }
     }
 }
@@ -56,8 +115,9 @@ function updateAllDropdowns() {
     const selects = document.querySelectorAll('.item-select');
     selects.forEach(select => {
         const currentValue = select.value;
+        const filteredItems = Object.keys(masterData).filter(key => masterData[key].template === currentTemplate);
         const optionsHtml = `<option value="">Select Item</option>` +
-            Object.keys(masterData).map(key => `<option value="${key}">${key}</option>`).join('');
+            filteredItems.map(key => `<option value="${key}">${key}</option>`).join('');
         select.innerHTML = optionsHtml;
         select.value = currentValue; // Try to restore selection
     });
@@ -68,7 +128,8 @@ function addItemRow() {
     const tr = document.createElement('tr');
 
     // Create Dropdown Options
-    const options = Object.keys(masterData).map(key => `<option value="${key}">${key}</option>`).join('');
+    const filteredItems = Object.keys(masterData).filter(key => masterData[key].template === currentTemplate);
+    const options = filteredItems.map(key => `<option value="${key}">${key}</option>`).join('');
 
     tr.innerHTML = `
         <td>
@@ -103,7 +164,8 @@ function updateRow(element) {
 
     const itemName = select.value;
     const qty = parseInt(qtyInput.value) || 0;
-    const price = masterData[itemName] || 0;
+    const itemData = masterData[itemName];
+    const price = itemData ? itemData.price : 0;
 
     unitDisplay.textContent = formatIDR(price);
 
@@ -152,6 +214,13 @@ function generateInvoice() {
             const hiddenElements = clonedDoc.querySelectorAll('.print\\:hidden');
             hiddenElements.forEach(el => {
                 el.style.display = 'none';
+            });
+
+            // Hide dropdown arrows for the snapshot
+            const selects = clonedDoc.querySelectorAll('.item-select');
+            selects.forEach(el => {
+                el.style.backgroundImage = 'none';
+                el.style.paddingRight = '0'; // align text nicely without the arrow gap
             });
         }
     }).then(canvas => {

@@ -1,5 +1,11 @@
-Item Name,Price (IDR)
-Etoile one,149000
-Etoile duo,349000
-Etoile four,599000
-Christmas Hampers Tin,159000
+Item Name,Price (IDR),Template
+Etoile one,149000,christmas
+Etoile duo,349000,christmas
+Etoile four,599000,christmas
+Christmas Hampers Tin,159000,christmas
+Double choco oat,70000,hanniel
+Raisin oat,70000,hanniel
+Almond choco oat,70000,hanniel
+Strawberry overnight oats,38000,hanniel
+Double choco overnight oats,38000,hanniel
+Tiramisu overnight oats,38000,hanniel

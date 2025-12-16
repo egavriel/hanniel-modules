@@ -68,16 +68,19 @@ function loadMasterData() {
             console.error('Error loading master data:', error);
             // Fallback default data if fetch fails (e.g. local file system without server)
             masterData = {
-                "Etoile one": { price: 149000, template: 'christmas' },
-                "Etoile duo": { price: 349000, template: 'christmas' },
-                "Etoile four": { price: 599000, template: 'christmas' },
-                "Christmas Hampers Tin": { price: 159000, template: 'christmas' },
-                "Double choco oat": { price: 70000, template: 'hanniel' },
-                "Raisin oat": { price: 70000, template: 'hanniel' },
-                "Almond choco oat": { price: 70000, template: 'hanniel' },
-                "Strawberry overnight oats": { price: 38000, template: 'hanniel' },
-                "Double choco overnight oats": { price: 38000, template: 'hanniel' },
-                "Tiramisu overnight oats": { price: 38000, template: 'hanniel' }
+                "Etoile one::christmas": { name: "Etoile one", price: 149000, template: 'christmas' },
+                "Etoile duo::christmas": { name: "Etoile duo", price: 349000, template: 'christmas' },
+                "Etoile four::christmas": { name: "Etoile four", price: 599000, template: 'christmas' },
+                "Christmas Hampers Tin::christmas": { name: "Christmas Hampers Tin", price: 159000, template: 'christmas' },
+                "Double choco oat::christmas": { name: "Double choco oat", price: 70000, template: 'christmas' },
+                "Raisin oat::christmas": { name: "Raisin oat", price: 70000, template: 'christmas' },
+                "Almond choco oat::christmas": { name: "Almond choco oat", price: 70000, template: 'christmas' },
+                "Double choco oat::hanniel": { name: "Double choco oat", price: 70000, template: 'hanniel' },
+                "Raisin oat::hanniel": { name: "Raisin oat", price: 70000, template: 'hanniel' },
+                "Almond choco oat::hanniel": { name: "Almond choco oat", price: 70000, template: 'hanniel' },
+                "Strawberry overnight oats::hanniel": { name: "Strawberry overnight oats", price: 38000, template: 'hanniel' },
+                "Double choco overnight oats::hanniel": { name: "Double choco overnight oats", price: 38000, template: 'hanniel' },
+                "Tiramisu overnight oats::hanniel": { name: "Tiramisu overnight oats", price: 38000, template: 'hanniel' }
             };
             updateAllDropdowns();
             addItemRow();
@@ -103,13 +106,13 @@ function parseCSV(text) {
             const price = parseFloat(priceStr);
 
             if (name && !isNaN(price)) {
-                masterData[name] = { price, template };
+                // Create a unique key by combining name and template to allow duplicates across templates
+                const key = `${name}::${template}`;
+                masterData[key] = { name, price, template };
             }
         }
     }
 }
-
-
 
 function updateAllDropdowns() {
     const selects = document.querySelectorAll('.item-select');
@@ -117,10 +120,14 @@ function updateAllDropdowns() {
         const currentValue = select.value;
         const filteredItems = Object.keys(masterData).filter(key => masterData[key].template === currentTemplate);
         const optionsHtml = `<option value="">Select Item</option>` +
-            filteredItems.map(key => `<option value="${key}">${key}</option>`).join('');
+            filteredItems.map(key => `<option value="${key}">${masterData[key].name || textFromKey(key)}</option>`).join('');
         select.innerHTML = optionsHtml;
         select.value = currentValue; // Try to restore selection
     });
+}
+
+function textFromKey(key) {
+    return key.includes('::') ? key.split('::')[0] : key;
 }
 
 function addItemRow() {
@@ -129,7 +136,7 @@ function addItemRow() {
 
     // Create Dropdown Options
     const filteredItems = Object.keys(masterData).filter(key => masterData[key].template === currentTemplate);
-    const options = filteredItems.map(key => `<option value="${key}">${key}</option>`).join('');
+    const options = filteredItems.map(key => `<option value="${key}">${masterData[key].name || textFromKey(key)}</option>`).join('');
 
     tr.innerHTML = `
         <td>
@@ -186,9 +193,43 @@ function calculateGrandTotal() {
     const ongkirInput = document.getElementById('ongkirInput');
     const ongkir = parseFloat(ongkirInput.value) || 0;
 
-    const grandTotal = subtotal + ongkir;
+    // Calculate Discount
+    const discountSelect = document.getElementById('specialDiscount');
+    const discountRate = parseFloat(discountSelect ? discountSelect.value : 0);
+    const discountAmount = subtotal * discountRate;
+
+    // Update Discount Display and Label
+    const discountDisplay = document.getElementById('discountValue');
+    const discountLabel = document.getElementById('discountLabel');
+
+    if (discountDisplay) {
+        discountDisplay.textContent = '-' + formatIDR(discountAmount);
+    }
+    if (discountLabel && discountSelect) {
+        const selectedText = discountSelect.options[discountSelect.selectedIndex].text;
+        if (discountRate > 0) {
+            discountLabel.textContent = `Special Discount (${selectedText})`;
+        } else {
+            discountLabel.textContent = 'Special Discount';
+        }
+    }
+
+    const grandTotal = subtotal - discountAmount + ongkir;
 
     document.getElementById('grandTotal').textContent = formatIDR(grandTotal);
+}
+
+function toggleDiscountRow() {
+    const discountSelect = document.getElementById('specialDiscount');
+    const footer = document.getElementById('invoiceFooter');
+
+    if (discountSelect && footer) {
+        if (parseFloat(discountSelect.value) > 0) {
+            footer.classList.remove('hidden');
+        } else {
+            footer.classList.add('hidden');
+        }
+    }
 }
 
 function formatIDR(num) {

@@ -34,6 +34,21 @@
         <button onclick="generateInvoice()"
             class="active:scale-95 transition-transform bg-green-700 text-white font-bold py-2 px-4 rounded w-full">Generate
             Invoice</button>
+        <div class="mt-4">
+            <label class="block text-sm mb-1">Special Discount</label>
+            <select id="specialDiscount" onchange="calculateGrandTotal(); toggleDiscountRow()"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded w-full p-1 cursor-pointer">
+                <option value="0">NONE</option>
+                <option value="0.05">5%</option>
+                <option value="0.10">10%</option>
+                <option value="0.20">20%</option>
+            </select>
+        </div>
+        <div class="mt-4 text-center">
+            <button onclick="loadMasterData()" class="text-xs text-gray-500 underline hover:text-gray-800">
+                Reload Master Data
+            </button>
+        </div>
     </div>
 
     <!-- Invoice Capture Area Wrapper for Mobile Scroll -->
@@ -90,6 +105,16 @@
                         <tbody id="invoiceItems" class="text-lg">
                             <!-- Items will be injected here -->
                         </tbody>
+                        <tfoot id="invoiceFooter" class="text-lg hidden">
+                            <tr class="border-t border-[#B0A090]">
+                                <td class="py-2 text-left font-bold font-serif italic" id="discountLabel">Special
+                                    Discount</td>
+                                <td></td>
+                                <td></td>
+                                <td class="py-2 text-right font-karla font-bold text-red-600" id="discountValue">-0</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
 
@@ -101,7 +126,7 @@
                     <div class="flex justify-between items-end">
                         <!-- Ongkir Input -->
                         <div class="flex items-center gap-2 text-xl font-bold text-[#8B7355] mb-2">
-                            <span>ongkir (hari H)</span>
+                            <span>Delivery Fee</span>
                             <input type="number" id="ongkirInput" placeholder="0"
                                 class="w-24 bg-transparent border-b border-[#8B7355] focus:outline-none text-right placeholder-[#8B7355]/50 print-hide-arrow"
                                 oninput="calculateGrandTotal()">
@@ -110,7 +135,7 @@
                         <!-- Grand Total Box -->
                         <div
                             class="bg-[#D6Cbb3] px-6 py-3 min-w-[300px] flex justify-between items-center font-bold text-xl shadow-sm">
-                            <span>TOTAL</span>
+                            <span>GRAND TOTAL</span>
                             <span id="grandTotal">0</span>
                         </div>
                     </div>

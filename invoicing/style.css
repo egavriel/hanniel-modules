@@ -17,7 +17,8 @@ html {
     width: 794px;
     /* A4 width at 96dpi */
     /* height: 1123px;  Let height grow naturally or fix it if strict A4 is needed */
-    min-height: 1123px;
+    /* height: 1123px;  Let height grow naturally or fix it if strict A4 is needed */
+    height: 1123px;
     margin: 0 auto;
     background-color: #F5F0E6;
 }

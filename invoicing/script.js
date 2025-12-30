@@ -17,7 +17,7 @@ const templates = {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    loadMasterData();
+    loadMasterData(true); // Pass true for initial load to add first row
     switchTemplate('christmas'); // Default template
 });
 
@@ -56,13 +56,18 @@ function switchTemplate(templateId) {
     updateAllDropdowns();
 }
 
-function loadMasterData() {
-    fetch('master_data.csv')
-        .then(response => response.text())
+function loadMasterData(isInitial = false) {
+    fetch('master_data.csv', { cache: 'no-store' })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.text();
+        })
         .then(csvText => {
             parseCSV(csvText);
             updateAllDropdowns();
-            addItemRow(); // Add first row after data is loaded
+            if (isInitial) {
+                addItemRow(); // Only add initial row on first load
+            }
         })
         .catch(error => {
             console.error('Error loading master data:', error);
@@ -78,13 +83,15 @@ function loadMasterData() {
                 "Double choco oat::hanniel": { name: "Double choco oat", price: 70000, template: 'hanniel' },
                 "Raisin oat::hanniel": { name: "Raisin oat", price: 70000, template: 'hanniel' },
                 "Almond choco oat::hanniel": { name: "Almond choco oat", price: 70000, template: 'hanniel' },
-                "Strawberry overnight oats::hanniel": { name: "Strawberry overnight oats", price: 38000, template: 'hanniel' },
-                "Double choco overnight oats::hanniel": { name: "Double choco overnight oats", price: 38000, template: 'hanniel' },
-                "Tiramisu overnight oats::hanniel": { name: "Tiramisu overnight oats", price: 38000, template: 'hanniel' }
+                "Strawberry overnight oats::hanniel": { name: "Strawberry overnight oats", price: 42000, template: 'hanniel' },
+                "Double choco overnight oats::hanniel": { name: "Double choco overnight oats", price: 42000, template: 'hanniel' },
+                "Tiramisu overnight oats::hanniel": { name: "Tiramisu overnight oats", price: 42000, template: 'hanniel' }
             };
             updateAllDropdowns();
-            addItemRow();
-            // alert('Note: using fallback data. Ensure you are running on a server to load master_data.csv');
+            if (isInitial) {
+                addItemRow();
+            }
+            console.warn('Note: Using fallback data. Changes to master_data.csv will not reflect if the file cannot be fetched.');
         });
 }
 
@@ -123,6 +130,11 @@ function updateAllDropdowns() {
             filteredItems.map(key => `<option value="${key}">${masterData[key].name || textFromKey(key)}</option>`).join('');
         select.innerHTML = optionsHtml;
         select.value = currentValue; // Try to restore selection
+
+        // Refresh the row data (price and total) in case master data changed
+        if (select.value) {
+            updateRow(select);
+        }
     });
 }
 

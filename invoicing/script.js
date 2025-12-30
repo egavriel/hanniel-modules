@@ -1,4 +1,4 @@
-let masterData = {}; // Will be populated from CSV
+let masterData = (typeof MASTER_DATA !== 'undefined') ? MASTER_DATA : {}; // Populated from master_data.js or fallback
 let currentTemplate = 'christmas'; // Track current template for item filtering
 
 // Template Configurations
@@ -17,7 +17,8 @@ const templates = {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    loadMasterData(true); // Pass true for initial load to add first row
+    updateAllDropdowns();
+    addItemRow();
     switchTemplate('christmas'); // Default template
 });
 
@@ -56,70 +57,7 @@ function switchTemplate(templateId) {
     updateAllDropdowns();
 }
 
-function loadMasterData(isInitial = false) {
-    fetch('master_data.csv', { cache: 'no-store' })
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.text();
-        })
-        .then(csvText => {
-            parseCSV(csvText);
-            updateAllDropdowns();
-            if (isInitial) {
-                addItemRow(); // Only add initial row on first load
-            }
-        })
-        .catch(error => {
-            console.error('Error loading master data:', error);
-            // Fallback default data if fetch fails (e.g. local file system without server)
-            masterData = {
-                "Etoile one::christmas": { name: "Etoile one", price: 149000, template: 'christmas' },
-                "Etoile duo::christmas": { name: "Etoile duo", price: 349000, template: 'christmas' },
-                "Etoile four::christmas": { name: "Etoile four", price: 599000, template: 'christmas' },
-                "Christmas Hampers Tin::christmas": { name: "Christmas Hampers Tin", price: 159000, template: 'christmas' },
-                "Double choco oat::christmas": { name: "Double choco oat", price: 70000, template: 'christmas' },
-                "Raisin oat::christmas": { name: "Raisin oat", price: 70000, template: 'christmas' },
-                "Almond choco oat::christmas": { name: "Almond choco oat", price: 70000, template: 'christmas' },
-                "Double choco oat::hanniel": { name: "Double choco oat", price: 70000, template: 'hanniel' },
-                "Raisin oat::hanniel": { name: "Raisin oat", price: 70000, template: 'hanniel' },
-                "Almond choco oat::hanniel": { name: "Almond choco oat", price: 70000, template: 'hanniel' },
-                "Strawberry overnight oats::hanniel": { name: "Strawberry overnight oats", price: 42000, template: 'hanniel' },
-                "Double choco overnight oats::hanniel": { name: "Double choco overnight oats", price: 42000, template: 'hanniel' },
-                "Tiramisu overnight oats::hanniel": { name: "Tiramisu overnight oats", price: 42000, template: 'hanniel' }
-            };
-            updateAllDropdowns();
-            if (isInitial) {
-                addItemRow();
-            }
-            console.warn('Note: Using fallback data. Changes to master_data.csv will not reflect if the file cannot be fetched.');
-        });
-}
-
-function parseCSV(text) {
-    const lines = text.split('\n');
-    masterData = {};
-
-    // Skip header row (index 0), start from 1
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line) continue;
-
-        // Parse Name,Price,Template
-        const parts = line.split(',');
-        if (parts.length >= 3) {
-            const template = parts[parts.length - 1].trim();
-            const priceStr = parts[parts.length - 2].trim();
-            const name = parts.slice(0, parts.length - 2).join(',').trim();
-            const price = parseFloat(priceStr);
-
-            if (name && !isNaN(price)) {
-                // Create a unique key by combining name and template to allow duplicates across templates
-                const key = `${name}::${template}`;
-                masterData[key] = { name, price, template };
-            }
-        }
-    }
-}
+// CSV loading removed in favor of JS data sync
 
 function updateAllDropdowns() {
     const selects = document.querySelectorAll('.item-select');

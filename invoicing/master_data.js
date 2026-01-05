@@ -5,10 +5,10 @@ const MASTER_DATA = {
     "Christmas Hampers Tin::christmas": { name: "Christmas Hampers Tin", price: 159000, template: "christmas" },
     "Double choco oat::christmas": { name: "Double choco oat", price: 70000, template: "christmas" },
     "Raisin oat::christmas": { name: "Raisin oat", price: 70000, template: "christmas" },
-    "Almond choco oat::christmas": { name: "Almond choco oat", price: 70000, template: "christmas" },
+    "Almond choco oat::christmas": { name: "Almond choco", price: 70000, template: "christmas" },
     "Double choco oat::hanniel": { name: "Double choco oat", price: 70000, template: "hanniel" },
     "Raisin oat::hanniel": { name: "Raisin oat", price: 70000, template: "hanniel" },
-    "Almond choco oat::hanniel": { name: "Almond choco oat", price: 70000, template: "hanniel" },
+    "Almond choco oat::hanniel": { name: "Almond choco", price: 70000, template: "hanniel" },
     "Strawberry overnight oats::hanniel": { name: "Strawberry overnight oats", price: 42000, template: "hanniel" },
     "Double choco overnight oats::hanniel": { name: "Double choco overnight oats", price: 42000, template: "hanniel" },
     "Tiramisu overnight oats::hanniel": { name: "Tiramisu overnight oats", price: 42000, template: "hanniel" }

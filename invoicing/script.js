@@ -44,15 +44,18 @@ function switchTemplate(templateId) {
     // Toggle INVOICE header visibility & Spacing
     const invoiceHeader = document.getElementById('invoice-header');
     const headerSection = document.getElementById('header-section');
+    const footerPositioning = document.getElementById('footer-positioning-container');
 
     if (templateId === 'hanniel') {
         invoiceHeader.style.visibility = 'hidden';
         // Increase spacing for Little Hanniel template
         // ADJUST HEADER SPACING HERE (default is usually around 48px/3rem)
         headerSection.style.marginBottom = '150px';
+        if (footerPositioning) footerPositioning.style.bottom = '200px';
     } else {
         invoiceHeader.style.visibility = 'visible';
         headerSection.style.marginBottom = ''; // Reverts to CSS default (mb-12)
+        if (footerPositioning) footerPositioning.style.bottom = '360px';
     }
     updateAllDropdowns();
 }

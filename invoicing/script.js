@@ -11,7 +11,14 @@ const templates = {
     "hanniel": {
         name: "Little Hanniel",
         background: (typeof hannielBgBase64 !== 'undefined') ? `url('${hannielBgBase64}')` : "url('invoice_bg_hanniel.png')",
-        textColor: "#000000"
+        textColor: '#5A4A3A',
+        accentColor: '#B0A090'
+    },
+    "hanniel-dp": {
+        name: "Little Hanniel (DP)",
+        background: (typeof hannielBgBase64 !== 'undefined') ? `url('${hannielBgBase64}')` : "url('invoice_bg_hanniel.png')",
+        textColor: '#5A4A3A',
+        accentColor: '#B0A090'
     }
 };
 
@@ -44,19 +51,53 @@ function switchTemplate(templateId) {
     // Toggle INVOICE header visibility & Spacing
     const invoiceHeader = document.getElementById('invoice-header');
     const headerSection = document.getElementById('header-section');
-    const footerPositioning = document.getElementById('footer-positioning-container');
+    const depositSubheader = document.getElementById('deposit-subheader');
+    const footerContainer = document.getElementById('footer-positioning-container');
 
-    if (templateId === 'hanniel') {
+    if (templateId === 'hanniel' || templateId === 'hanniel-dp') {
         invoiceHeader.style.visibility = 'hidden';
-        // Increase spacing for Little Hanniel template
-        // ADJUST HEADER SPACING HERE (default is usually around 48px/3rem)
         headerSection.style.marginBottom = '150px';
-        if (footerPositioning) footerPositioning.style.bottom = '200px';
+        if (footerContainer) footerContainer.style.bottom = '200px';
+
+        if (depositSubheader) {
+            if (templateId === 'hanniel-dp') {
+                depositSubheader.style.display = 'block';
+            } else {
+                depositSubheader.style.display = 'none';
+            }
+        }
     } else {
         invoiceHeader.style.visibility = 'visible';
         headerSection.style.marginBottom = ''; // Reverts to CSS default (mb-12)
-        if (footerPositioning) footerPositioning.style.bottom = '360px';
+        if (footerContainer) footerContainer.style.bottom = '360px';
+        if (depositSubheader) depositSubheader.style.display = 'none';
     }
+
+    // Toggle Item Description Visibility
+    const descriptionInputs = document.querySelectorAll('.item-description');
+    descriptionInputs.forEach(input => {
+        if (templateId === 'hanniel-dp') {
+            input.classList.remove('hidden');
+        } else {
+            input.classList.add('hidden');
+        }
+    });
+
+    // Toggle Order Value, Deposit, and Notes Visibility (DP Only)
+    const orderArea = document.getElementById('orderValueArea');
+    const depositArea = document.getElementById('depositInputArea');
+    const notesArea = document.getElementById('notesArea');
+
+    if (templateId === 'hanniel-dp') {
+        if (orderArea) orderArea.classList.remove('hidden');
+        if (depositArea) depositArea.classList.remove('hidden');
+        if (notesArea) notesArea.classList.remove('hidden');
+    } else {
+        if (orderArea) orderArea.classList.add('hidden');
+        if (depositArea) depositArea.classList.add('hidden');
+        if (notesArea) notesArea.classList.add('hidden');
+    }
+
     updateAllDropdowns();
 }
 
@@ -97,6 +138,9 @@ function addItemRow() {
                 <option value="">Select Item</option>
                 ${options}
             </select>
+            <input type="text" placeholder="Item description..." 
+                class="item-description w-full bg-transparent border-none focus:outline-none italic text-[#5A4A3A]/60 ${currentTemplate === 'hanniel-dp' ? '' : 'hidden'}" 
+                style="font-size: 0.85rem; margin-top: 2px;">
         </td>
         <td class="text-center">
             <input type="number" class="w-12 text-center bg-transparent border-b border-[#5A4A3A]/20 focus:outline-none" value="1" min="1" oninput="updateRow(this)">
@@ -167,7 +211,20 @@ function calculateGrandTotal() {
         }
     }
 
-    const grandTotal = subtotal - discountAmount + ongkir;
+    let grandTotal = subtotal - discountAmount + ongkir;
+
+    // Update Total Order Value (DP Only: Subtotal - Discount, excluding Ongkir)
+    const orderValueDisplay = document.getElementById('orderValue');
+    if (orderValueDisplay) {
+        orderValueDisplay.textContent = formatIDR(subtotal - discountAmount);
+    }
+
+    // SPECIAL LOGIC FOR DP: Grand Total = Deposit
+    if (currentTemplate === 'hanniel-dp') {
+        const depositInput = document.getElementById('depositInput');
+        const depositValue = parseFloat(depositInput ? depositInput.value : 0) || 0;
+        grandTotal = depositValue;
+    }
 
     document.getElementById('grandTotal').textContent = formatIDR(grandTotal);
 }
@@ -210,12 +267,38 @@ function generateInvoice() {
                 el.style.display = 'none';
             });
 
-            // Hide dropdown arrows for the snapshot
+            // Hide dropdown arrows and description placeholders for the snapshot
             const selects = clonedDoc.querySelectorAll('.item-select');
             selects.forEach(el => {
                 el.style.backgroundImage = 'none';
                 el.style.paddingRight = '0'; // align text nicely without the arrow gap
             });
+
+            const descriptions = clonedDoc.querySelectorAll('.item-description');
+            descriptions.forEach(el => {
+                if (!el.value) {
+                    el.style.display = 'none'; // Hide if empty
+                } else {
+                    el.placeholder = ''; // Remove placeholder if text exists
+                }
+            });
+
+            const depositInput = clonedDoc.getElementById('depositInput');
+            if (depositInput) {
+                if (!depositInput.value || depositInput.value === "0") {
+                    clonedDoc.getElementById('depositInputArea').style.display = 'none';
+                } else {
+                    depositInput.placeholder = '';
+                }
+            }
+
+            const orderValueArea = clonedDoc.getElementById('orderValueArea');
+            const orderValueDisplay = clonedDoc.getElementById('orderValue');
+            if (orderValueArea && orderValueDisplay) {
+                if (orderValueDisplay.textContent === "0" || currentTemplate !== 'hanniel-dp') {
+                    orderValueArea.style.display = 'none';
+                }
+            }
         }
     }).then(canvas => {
         try {

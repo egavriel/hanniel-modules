@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -24,6 +24,7 @@
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded w-full p-1 cursor-pointer">
                 <option value="christmas">Christmas 2025</option>
                 <option value="hanniel">Little Hanniel</option>
+                <option value="hanniel-dp">Little Hanniel - DP</option>
             </select>
         </div>
         <div class="mb-4">
@@ -54,8 +55,11 @@
 
             <div class="relative z-10 p-12 h-full flex flex-col">
                 <!-- Header -->
-                <div id="header-section" class="mb-12">
+                <div id="header-section" class="mb-12 text-right">
                     <h1 id="invoice-header" class="text-6xl font-serif text-[#5A4A3A]">INVOICE</h1>
+                    <div id="deposit-subheader"
+                        class="text-2xl font-bold hidden text-right transform translate-x-[-105px]">Deposit Invoice
+                    </div>
                 </div>
 
                 <!-- Info Section -->
@@ -114,13 +118,29 @@
                     </table>
                 </div>
 
+                <!-- Notes Section (DP Only) -->
+                <div id="notesArea" class="hidden mt-4 px-2 text-[#8B7355] font-karla">
+                    <h3 class="font-bold text-lg mb-2">Notes:</h3>
+                    <p class="mb-4 leading-relaxed">
+                        Custom order will be prepared after deposit confirmation. <br>
+                        Remaining payment will be settled before delivery.
+                    </p>
+
+                    <hr class="border-[#B0A090] mb-4">
+
+                    <p class="leading-relaxed">
+                        <br><br>
+                        <!--This invoice serves as confirmation for a custom order.-->
+                    </p>
+                </div>
+
                 <!-- Spacer for bottom visual balance -->
                 <div class="mt-8 mb-4"></div>
 
                 <!-- Footer / Totals (Fixed Position) -->
                 <div id="footer-positioning-container" class="absolute bottom-[360px] left-0 w-full px-12 z-20">
                     <div class="flex justify-between items-end">
-                        <!-- Ongkir Input -->
+                        <!-- Ongkir Input (Left) -->
                         <div class="flex items-center gap-2 text-xl font-bold text-[#8B7355] mb-2">
                             <span>Delivery Fee</span>
                             <input type="number" id="ongkirInput" placeholder="0"
@@ -128,26 +148,43 @@
                                 oninput="calculateGrandTotal()">
                         </div>
 
-                        <!-- Grand Total Box -->
-                        <div
-                            class="bg-[#D6Cbb3] px-6 py-3 min-w-[300px] flex justify-between items-center font-bold text-xl shadow-sm">
-                            <span>GRAND TOTAL</span>
-                            <span id="grandTotal">0</span>
+                        <!-- Right Column: Order Value, Deposit, Grand Total -->
+                        <div class="flex flex-col items-end">
+                            <!-- Total Order Value (DP Only) -->
+                            <div id="orderValueArea"
+                                class="hidden flex items-center gap-2 text-xl font-bold text-[#8B7355] mb-2 mr-8">
+                                <span>Total Order Value</span>
+                                <span id="orderValue" class="min-w-[128px] text-right">0</span>
+                            </div>
+
+                            <!-- Deposit Input (DP Only) -->
+                            <div id="depositInputArea"
+                                class="hidden flex items-center gap-2 text-xl font-bold text-[#8B7355] mb-4 mr-8">
+                                <span>Deposit</span>
+                                <input type="number" id="depositInput" placeholder="0"
+                                    class="w-32 bg-transparent border-b border-[#8B7355] focus:outline-none text-right placeholder-[#8B7355]/50 print-hide-arrow"
+                                    oninput="calculateGrandTotal()">
+                            </div>
+
+                            <!-- Grand Total Box -->
+                            <div
+                                class="bg-[#D6Cbb3] px-6 py-3 min-w-[300px] flex justify-between items-center font-bold text-xl shadow-sm">
+                                <span>GRAND TOTAL</span>
+                                <span id="grandTotal">0</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Spacer to push content up from the bottom illustration in the background -->
                 <div class="h-48 w-full"></div>
-
             </div>
         </div>
-    </div>
 
-    <!-- Scripts -->
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src="assets.js"></script>
-    <script src="script.js"></script>
+        <!-- Scripts -->
+        <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+        <script src="assets.js"></script>
+        <script src="script.js"></script>
 </body>
 
 </html>

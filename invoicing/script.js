@@ -8,6 +8,11 @@ const templates = {
         background: (typeof christmasBgBase64 !== 'undefined') ? `url('${christmasBgBase64}')` : "url('invoice_bg.png')",
         textColor: "#5A4A3A"
     },
+    "cny": {
+        name: "CNY 2026",
+        background: (typeof cnyBgBase64 !== 'undefined') ? `url('${cnyBgBase64}')` : "url('invoice_bg_chinese.jpeg')",
+        textColor: "#5A4A3A"
+    },
     "hanniel": {
         name: "Little Hanniel",
         background: (typeof hannielBgBase64 !== 'undefined') ? `url('${hannielBgBase64}')` : "url('invoice_bg_hanniel.png')",
@@ -66,6 +71,11 @@ function switchTemplate(templateId) {
                 depositSubheader.style.display = 'none';
             }
         }
+    } else if (templateId === 'cny') {
+        invoiceHeader.style.visibility = 'hidden';
+        headerSection.style.marginBottom = '180px'; // Configurable: push BILL TO further down for CNY
+        if (footerContainer) footerContainer.style.bottom = '360px';
+        if (depositSubheader) depositSubheader.style.display = 'none';
     } else {
         invoiceHeader.style.visibility = 'visible';
         headerSection.style.marginBottom = ''; // Reverts to CSS default (mb-12)

@@ -12,5 +12,5 @@ const MASTER_DATA = {
     "Strawberry overnight oats::hanniel": { name: "Strawberry overnight oats", price: 42000, template: "hanniel" },
     "Double choco overnight oats::hanniel": { name: "Double choco overnight oats", price: 42000, template: "hanniel" },
     "Tiramisu overnight oats::hanniel": { name: "Tiramisu overnight oats", price: 42000, template: "hanniel" },
-    "Custom tin cookie hamper::hanniel-dp": { name: "Custom tin cookie hamper", price: 138000, template: "hanniel-dp" }
+    "Custom tin cookie hamper::hanniel-dp": { name: "Custom tin cookie hamper", price: 65000, template: "hanniel-dp" }
 };

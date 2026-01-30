@@ -87,15 +87,21 @@ function switchTemplate(templateId) {
     const orderArea = document.getElementById('orderValueArea');
     const depositArea = document.getElementById('depositInputArea');
     const notesArea = document.getElementById('notesArea');
+    const courtesyArea = document.getElementById('courtesyAdjustmentRow');
+    const courtesyControl = document.getElementById('courtesyAdjustmentControlArea');
 
     if (templateId === 'hanniel-dp') {
         if (orderArea) orderArea.classList.remove('hidden');
         if (depositArea) depositArea.classList.remove('hidden');
         if (notesArea) notesArea.classList.remove('hidden');
+        if (courtesyArea) courtesyArea.classList.remove('hidden');
+        if (courtesyControl) courtesyControl.classList.remove('hidden');
     } else {
         if (orderArea) orderArea.classList.add('hidden');
         if (depositArea) depositArea.classList.add('hidden');
         if (notesArea) notesArea.classList.add('hidden');
+        if (courtesyArea) courtesyArea.classList.add('hidden');
+        if (courtesyControl) courtesyControl.classList.add('hidden');
     }
 
     updateAllDropdowns();
@@ -211,12 +217,20 @@ function calculateGrandTotal() {
         }
     }
 
+    // Calculate Courtesy Adjustment (DP Only)
+    const courtesyInput = document.getElementById('courtesyAdjustmentInput');
+    const courtesyAmount = parseFloat(courtesyInput ? courtesyInput.value : 0) || 0;
+    const courtesyDisplay = document.getElementById('courtesyAdjustmentValue');
+    if (courtesyDisplay) {
+        courtesyDisplay.textContent = '-' + formatIDR(courtesyAmount);
+    }
+
     let grandTotal = subtotal - discountAmount + ongkir;
 
-    // Update Total Order Value (DP Only: Subtotal - Discount, excluding Ongkir)
+    // Update Total Order Value (DP Only: Subtotal - Discount - Courtesy, excluding Ongkir)
     const orderValueDisplay = document.getElementById('orderValue');
     if (orderValueDisplay) {
-        orderValueDisplay.textContent = formatIDR(subtotal - discountAmount);
+        orderValueDisplay.textContent = formatIDR(subtotal - discountAmount - courtesyAmount);
     }
 
     // SPECIAL LOGIC FOR DP: Grand Total = Deposit
@@ -227,17 +241,37 @@ function calculateGrandTotal() {
     }
 
     document.getElementById('grandTotal').textContent = formatIDR(grandTotal);
+
+    // Update row/footer visibility
+    toggleFooterRows();
 }
 
-function toggleDiscountRow() {
+function toggleFooterRows() {
     const discountSelect = document.getElementById('specialDiscount');
+    const courtesyInput = document.getElementById('courtesyAdjustmentInput');
     const footer = document.getElementById('invoiceFooter');
+    const discountRow = document.getElementById('specialDiscountRow');
+    const courtesyRow = document.getElementById('courtesyAdjustmentRow');
 
-    if (discountSelect && footer) {
-        if (parseFloat(discountSelect.value) > 0) {
+    if (footer) {
+        const hasDiscount = discountSelect && parseFloat(discountSelect.value) > 0;
+        const hasCourtesy = courtesyInput && (parseFloat(courtesyInput.value) || 0) > 0;
+
+        // Show footer if either exists, or if we are in DP template
+        if (hasDiscount || hasCourtesy || currentTemplate === 'hanniel-dp') {
             footer.classList.remove('hidden');
         } else {
             footer.classList.add('hidden');
+        }
+
+        // Individual row toggling
+        if (discountRow) {
+            if (hasDiscount) discountRow.classList.remove('hidden');
+            else discountRow.classList.add('hidden');
+        }
+        if (courtesyRow) {
+            if (hasCourtesy) courtesyRow.classList.remove('hidden');
+            else courtesyRow.classList.add('hidden');
         }
     }
 }
@@ -297,6 +331,29 @@ function generateInvoice() {
             if (orderValueArea && orderValueDisplay) {
                 if (orderValueDisplay.textContent === "0" || currentTemplate !== 'hanniel-dp') {
                     orderValueArea.style.display = 'none';
+                }
+            }
+
+            // Hide Special Discount row if zero or not DP
+            const discountRow = clonedDoc.getElementById('specialDiscountRow');
+            const discountSelect = document.getElementById('specialDiscount');
+            if (discountRow && discountSelect) {
+                if (parseFloat(discountSelect.value) === 0) {
+                    discountRow.style.display = 'none';
+                } else if (currentTemplate === 'hanniel-dp') {
+                    // Always show for DP if non-zero
+                    discountRow.style.display = 'table-row';
+                }
+            }
+
+            // Hide Courtesy Adjustment row if zero
+            const courtesyRow = clonedDoc.getElementById('courtesyAdjustmentRow');
+            const courtesyInput = document.getElementById('courtesyAdjustmentInput');
+            if (courtesyRow && courtesyInput) {
+                if (!courtesyInput.value || courtesyInput.value === "0" || currentTemplate !== 'hanniel-dp') {
+                    courtesyRow.style.display = 'none';
+                } else {
+                    courtesyRow.style.display = 'table-row';
                 }
             }
         }

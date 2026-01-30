@@ -13,6 +13,11 @@ const templates = {
         background: (typeof cnyBgBase64 !== 'undefined') ? `url('${cnyBgBase64}')` : "url('invoice_bg_chinese.jpeg')",
         textColor: "#5A4A3A"
     },
+    "cnyhp": {
+        name: "CNYHP 2026",
+        background: (typeof cnyhpBgBase64 !== 'undefined') ? `url('${cnyhpBgBase64}')` : "url('invoice_bg_chinese_hp.jpeg')",
+        textColor: "#5A4A3A"
+    },
     "hanniel": {
         name: "Little Hanniel",
         background: (typeof hannielBgBase64 !== 'undefined') ? `url('${hannielBgBase64}')` : "url('invoice_bg_hanniel.png')",
@@ -74,14 +79,29 @@ function switchTemplate(templateId) {
         // Hide CNY Additional Information
         const cnyInfo1 = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo1) cnyInfo1.classList.add('hidden');
+        const cnyhpInfo1 = document.getElementById('cnyhpAdditionalInfo');
+        if (cnyhpInfo1) cnyhpInfo1.classList.add('hidden');
     } else if (templateId === 'cny') {
         invoiceHeader.style.visibility = 'hidden';
         headerSection.style.marginBottom = '180px'; // Configurable: push BILL TO further down for CNY
         if (footerContainer) footerContainer.style.bottom = '360px';
         if (depositSubheader) depositSubheader.style.display = 'none';
-        // Show CNY Additional Information
+        // Show CNY Additional Information, hide CNYHP
         const cnyInfo = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo) cnyInfo.classList.remove('hidden');
+        const cnyhpInfo = document.getElementById('cnyhpAdditionalInfo');
+        if (cnyhpInfo) cnyhpInfo.classList.add('hidden');
+    } else if (templateId === 'cnyhp') {
+        invoiceHeader.style.visibility = 'visible'; // INVOICE wording visible for CNYHP
+        invoiceHeader.style.marginTop = '70px';      // Push INVOICE down
+        headerSection.style.marginBottom = '80px';  // Push BILL TO up
+        if (footerContainer) footerContainer.style.bottom = '300px';
+        if (depositSubheader) depositSubheader.style.display = 'none';
+        // Hide CNY Additional Information, show CNYHP Additional Information
+        const cnyInfo = document.getElementById('cnyAdditionalInfo');
+        if (cnyInfo) cnyInfo.classList.add('hidden');
+        const cnyhpInfo = document.getElementById('cnyhpAdditionalInfo');
+        if (cnyhpInfo) cnyhpInfo.classList.remove('hidden');
     } else {
         invoiceHeader.style.visibility = 'visible';
         headerSection.style.marginBottom = ''; // Reverts to CSS default (mb-12)
@@ -90,6 +110,8 @@ function switchTemplate(templateId) {
         // Hide CNY Additional Information
         const cnyInfo2 = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo2) cnyInfo2.classList.add('hidden');
+        const cnyhpInfo2 = document.getElementById('cnyhpAdditionalInfo');
+        if (cnyhpInfo2) cnyhpInfo2.classList.add('hidden');
     }
 
     // Toggle Item Description Visibility

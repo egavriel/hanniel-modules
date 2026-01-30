@@ -5,7 +5,8 @@ const path = require('path');
 const assets = [
     { src: 'invoice_bg.png', varName: 'christmasBgBase64' },
     { src: 'invoice_bg_hanniel.png', varName: 'hannielBgBase64' },
-    { src: 'invoice_bg_chinese.jpeg', varName: 'cnyBgBase64' }
+    { src: 'invoice_bg_chinese.jpeg', varName: 'cnyBgBase64' },
+    { src: 'invoice_bg_chinese_hp.jpeg', varName: 'cnyhpBgBase64' }
 ];
 
 const outputPath = path.join(__dirname, 'assets.js');

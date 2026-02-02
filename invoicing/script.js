@@ -25,7 +25,13 @@ const templates = {
         accentColor: '#B0A090'
     },
     "hanniel-dp": {
-        name: "Little Hanniel (DP)",
+        name: "Little Hanniel - DP",
+        background: (typeof hannielBgBase64 !== 'undefined') ? `url('${hannielBgBase64}')` : "url('invoice_bg_hanniel.png')",
+        textColor: '#5A4A3A',
+        accentColor: '#B0A090'
+    },
+    "hanniel-fi": {
+        name: "Little Hanniel - FI",
         background: (typeof hannielBgBase64 !== 'undefined') ? `url('${hannielBgBase64}')` : "url('invoice_bg_hanniel.png')",
         textColor: '#5A4A3A',
         accentColor: '#B0A090'
@@ -64,16 +70,35 @@ function switchTemplate(templateId) {
     const depositSubheader = document.getElementById('deposit-subheader');
     const footerContainer = document.getElementById('footer-positioning-container');
 
-    if (templateId === 'hanniel' || templateId === 'hanniel-dp') {
+    if (templateId === 'hanniel' || templateId === 'hanniel-dp' || templateId === 'hanniel-fi') {
         invoiceHeader.style.visibility = 'hidden';
         headerSection.style.marginBottom = '150px';
-        if (footerContainer) footerContainer.style.bottom = '200px';
+        // Adjust footer position: FI needs more space due to Balance Due field
+        if (templateId === 'hanniel-fi') {
+            if (footerContainer) footerContainer.style.bottom = '140px';
+        } else {
+            if (footerContainer) footerContainer.style.bottom = '200px';
+        }
 
         if (depositSubheader) {
             if (templateId === 'hanniel-dp') {
                 depositSubheader.style.display = 'block';
+                depositSubheader.textContent = 'Deposit Invoice';
+            } else if (templateId === 'hanniel-fi') {
+                depositSubheader.style.display = 'block';
+                depositSubheader.textContent = 'Final Invoice';
             } else {
                 depositSubheader.style.display = 'none';
+            }
+        }
+
+        // Update Notes content based on template
+        const notesContent = document.querySelector('#notesArea p');
+        if (notesContent) {
+            if (templateId === 'hanniel-fi') {
+                notesContent.innerHTML = 'Thank you for your order. <br>Kindly complete the remaining payment prior to delivery.';
+            } else if (templateId === 'hanniel-dp') {
+                notesContent.innerHTML = 'Custom order will be prepared after deposit confirmation. <br>Remaining payment will be settled before delivery.';
             }
         }
         // Hide CNY Additional Information
@@ -117,29 +142,41 @@ function switchTemplate(templateId) {
     // Toggle Item Description Visibility
     const descriptionInputs = document.querySelectorAll('.item-description');
     descriptionInputs.forEach(input => {
-        if (templateId === 'hanniel-dp') {
+        if (templateId === 'hanniel-dp' || templateId === 'hanniel-fi') {
             input.classList.remove('hidden');
         } else {
             input.classList.add('hidden');
         }
     });
 
-    // Toggle Order Value, Deposit, and Notes Visibility (DP Only)
+    // Toggle Order Value, Deposit, Balance Due, and Notes Visibility (DP/FI Only)
     const orderArea = document.getElementById('orderValueArea');
     const depositArea = document.getElementById('depositInputArea');
+    const depositLabel = document.getElementById('depositLabel');
+    const balanceDueArea = document.getElementById('balanceDueArea');
     const notesArea = document.getElementById('notesArea');
     const courtesyArea = document.getElementById('courtesyAdjustmentRow');
     const courtesyControl = document.getElementById('courtesyAdjustmentControlArea');
 
-    if (templateId === 'hanniel-dp') {
+    if (templateId === 'hanniel-dp' || templateId === 'hanniel-fi') {
         if (orderArea) orderArea.classList.remove('hidden');
         if (depositArea) depositArea.classList.remove('hidden');
         if (notesArea) notesArea.classList.remove('hidden');
         if (courtesyArea) courtesyArea.classList.remove('hidden');
         if (courtesyControl) courtesyControl.classList.remove('hidden');
+
+        // Template-specific settings
+        if (templateId === 'hanniel-fi') {
+            if (depositLabel) depositLabel.textContent = 'Deposit Paid';
+            if (balanceDueArea) balanceDueArea.classList.remove('hidden');
+        } else {
+            if (depositLabel) depositLabel.textContent = 'Deposit';
+            if (balanceDueArea) balanceDueArea.classList.add('hidden');
+        }
     } else {
         if (orderArea) orderArea.classList.add('hidden');
         if (depositArea) depositArea.classList.add('hidden');
+        if (balanceDueArea) balanceDueArea.classList.add('hidden');
         if (notesArea) notesArea.classList.add('hidden');
         if (courtesyArea) courtesyArea.classList.add('hidden');
         if (courtesyControl) courtesyControl.classList.add('hidden');
@@ -186,7 +223,7 @@ function addItemRow() {
                 ${options}
             </select>
             <input type="text" placeholder="Item description..." 
-                class="item-description w-full bg-transparent border-none focus:outline-none italic text-[#5A4A3A]/60 ${currentTemplate === 'hanniel-dp' ? '' : 'hidden'}" 
+                class="item-description w-full bg-transparent border-none focus:outline-none italic text-[#5A4A3A]/60 ${currentTemplate === 'hanniel-dp' || currentTemplate === 'hanniel-fi' ? '' : 'hidden'}" 
                 style="font-size: 0.85rem; margin-top: 2px;">
         </td>
         <td class="text-center">
@@ -268,17 +305,30 @@ function calculateGrandTotal() {
 
     let grandTotal = subtotal - discountAmount + ongkir;
 
-    // Update Total Order Value (DP Only: Subtotal - Discount - Courtesy, excluding Ongkir)
+    // Update Total Order Value (DP/FI: Subtotal - Discount - Courtesy, excluding Ongkir)
     const orderValueDisplay = document.getElementById('orderValue');
+    const totalOrderValue = subtotal - discountAmount - courtesyAmount;
     if (orderValueDisplay) {
-        orderValueDisplay.textContent = formatIDR(subtotal - discountAmount - courtesyAmount);
+        orderValueDisplay.textContent = formatIDR(totalOrderValue);
     }
+
+    // Get deposit value
+    const depositInput = document.getElementById('depositInput');
+    const depositValue = parseFloat(depositInput ? depositInput.value : 0) || 0;
 
     // SPECIAL LOGIC FOR DP: Grand Total = Deposit
     if (currentTemplate === 'hanniel-dp') {
-        const depositInput = document.getElementById('depositInput');
-        const depositValue = parseFloat(depositInput ? depositInput.value : 0) || 0;
         grandTotal = depositValue;
+    }
+
+    // SPECIAL LOGIC FOR FI: Balance Due = Total Order Value - Deposit Paid, Grand Total = Balance Due + Ongkir
+    if (currentTemplate === 'hanniel-fi') {
+        const balanceDue = totalOrderValue - depositValue;
+        const balanceDueDisplay = document.getElementById('balanceDueValue');
+        if (balanceDueDisplay) {
+            balanceDueDisplay.textContent = formatIDR(balanceDue);
+        }
+        grandTotal = balanceDue + ongkir;
     }
 
     document.getElementById('grandTotal').textContent = formatIDR(grandTotal);
@@ -298,8 +348,8 @@ function toggleFooterRows() {
         const hasDiscount = discountSelect && parseFloat(discountSelect.value) > 0;
         const hasCourtesy = courtesyInput && (parseFloat(courtesyInput.value) || 0) > 0;
 
-        // Show footer if either exists, or if we are in DP template
-        if (hasDiscount || hasCourtesy || currentTemplate === 'hanniel-dp') {
+        // Show footer if either exists, or if we are in DP/FI template
+        if (hasDiscount || hasCourtesy || currentTemplate === 'hanniel-dp' || currentTemplate === 'hanniel-fi') {
             footer.classList.remove('hidden');
         } else {
             footer.classList.add('hidden');
@@ -370,19 +420,19 @@ function generateInvoice() {
             const orderValueArea = clonedDoc.getElementById('orderValueArea');
             const orderValueDisplay = clonedDoc.getElementById('orderValue');
             if (orderValueArea && orderValueDisplay) {
-                if (orderValueDisplay.textContent === "0" || currentTemplate !== 'hanniel-dp') {
+                if (orderValueDisplay.textContent === "0" || (currentTemplate !== 'hanniel-dp' && currentTemplate !== 'hanniel-fi')) {
                     orderValueArea.style.display = 'none';
                 }
             }
 
-            // Hide Special Discount row if zero or not DP
+            // Hide Special Discount row if zero or not DP/FI
             const discountRow = clonedDoc.getElementById('specialDiscountRow');
             const discountSelect = document.getElementById('specialDiscount');
             if (discountRow && discountSelect) {
                 if (parseFloat(discountSelect.value) === 0) {
                     discountRow.style.display = 'none';
-                } else if (currentTemplate === 'hanniel-dp') {
-                    // Always show for DP if non-zero
+                } else if (currentTemplate === 'hanniel-dp' || currentTemplate === 'hanniel-fi') {
+                    // Always show for DP/FI if non-zero
                     discountRow.style.display = 'table-row';
                 }
             }
@@ -391,7 +441,7 @@ function generateInvoice() {
             const courtesyRow = clonedDoc.getElementById('courtesyAdjustmentRow');
             const courtesyInput = document.getElementById('courtesyAdjustmentInput');
             if (courtesyRow && courtesyInput) {
-                if (!courtesyInput.value || courtesyInput.value === "0" || currentTemplate !== 'hanniel-dp') {
+                if (!courtesyInput.value || courtesyInput.value === "0" || (currentTemplate !== 'hanniel-dp' && currentTemplate !== 'hanniel-fi')) {
                     courtesyRow.style.display = 'none';
                 } else {
                     courtesyRow.style.display = 'table-row';

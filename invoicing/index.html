@@ -27,6 +27,7 @@
                 <option value="cnyhp">CNYHP 2026</option>
                 <option value="hanniel">Little Hanniel</option>
                 <option value="hanniel-dp">Little Hanniel - DP</option>
+                <option value="hanniel-fi">Little Hanniel - FI</option>
             </select>
         </div>
         <div class="mb-4">
@@ -166,20 +167,27 @@
 
                         <!-- Right Column: Order Value, Deposit, Grand Total -->
                         <div class="flex flex-col items-end">
-                            <!-- Total Order Value (DP Only) -->
+                            <!-- Total Order Value (DP/FI Only) -->
                             <div id="orderValueArea"
                                 class="hidden flex items-center gap-2 text-xl font-bold text-[#8B7355] mb-2 mr-8">
                                 <span>Total Order Value</span>
                                 <span id="orderValue" class="min-w-[128px] text-right">0</span>
                             </div>
 
-                            <!-- Deposit Input (DP Only) -->
+                            <!-- Deposit Input (DP/FI Only) -->
                             <div id="depositInputArea"
-                                class="hidden flex items-center gap-2 text-xl font-bold text-[#8B7355] mb-4 mr-8">
-                                <span>Deposit</span>
+                                class="hidden flex items-center gap-2 text-xl font-bold text-[#8B7355] mb-2 mr-8">
+                                <span id="depositLabel">Deposit</span>
                                 <input type="number" id="depositInput" placeholder="0"
                                     class="w-32 bg-transparent border-b border-[#8B7355] focus:outline-none text-right placeholder-[#8B7355]/50 print-hide-arrow"
                                     oninput="calculateGrandTotal()">
+                            </div>
+
+                            <!-- Balance Due (FI Only) -->
+                            <div id="balanceDueArea"
+                                class="hidden flex items-center gap-2 text-xl font-bold text-[#8B7355] mb-4 mr-8">
+                                <span>Balance Due</span>
+                                <span id="balanceDueValue" class="min-w-[128px] text-right">0</span>
                             </div>
 
                             <!-- Grand Total Box -->

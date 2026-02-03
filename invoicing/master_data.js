@@ -23,4 +23,8 @@ const MASTER_DATA = {
     "Double choco oat::cnyhp": { name: "Double choco oat", price: 70000, template: "cnyhp" },
     "Raisin oat::cnyhp": { name: "Raisin oat", price: 70000, template: "cnyhp" },
     "Almond choco oat::cnyhp": { name: "Almond choco", price: 70000, template: "cnyhp" },
+    "Biskuit Kacang Almond Renda::cnyhp": { name: "Biskuit Kacang Almond Renda", price: 89000, template: "cnyhp" },
+    "Kuih Nenas": { name: "Kuih Nenas", price: 99000, template: "cnyhp" },
+    "Biskuit Bijen Hitam::cnyhp": { name: "Biskuit Bijen Hitam", price: 89000, template: "cnyhp" },
+    "Classic Kuih Bangkit::cnyhp": { name: "Classic Kuih Bangkit", price: 82000, template: "cnyhp" },
 };

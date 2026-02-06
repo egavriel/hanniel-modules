@@ -1,5 +1,5 @@
 let masterData = (typeof MASTER_DATA !== 'undefined') ? MASTER_DATA : {}; // Populated from master_data.js or fallback
-let currentTemplate = 'christmas'; // Track current template for item filtering
+let currentTemplate = 'cny'; // Track current template for item filtering
 
 // Template Configurations
 const templates = {
@@ -42,7 +42,7 @@ const templates = {
 document.addEventListener('DOMContentLoaded', () => {
     updateAllDropdowns();
     addItemRow();
-    switchTemplate('christmas'); // Default template
+    switchTemplate('cny'); // Default template
 });
 
 function switchTemplate(templateId) {

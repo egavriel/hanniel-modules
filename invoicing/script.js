@@ -109,7 +109,7 @@ function switchTemplate(templateId) {
     } else if (templateId === 'cny') {
         invoiceHeader.style.visibility = 'hidden';
         headerSection.style.marginBottom = '180px'; // Configurable: push BILL TO further down for CNY
-        if (footerContainer) footerContainer.style.bottom = '360px';
+        if (footerContainer) footerContainer.style.bottom = '280px';
         if (depositSubheader) depositSubheader.style.display = 'none';
         // Show CNY Additional Information, hide CNYHP
         const cnyInfo = document.getElementById('cnyAdditionalInfo');

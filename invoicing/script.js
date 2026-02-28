@@ -1,5 +1,5 @@
 let masterData = (typeof MASTER_DATA !== 'undefined') ? MASTER_DATA : {}; // Populated from master_data.js or fallback
-let currentTemplate = 'cny'; // Track current template for item filtering
+let currentTemplate = 'eid'; // Track current template for item filtering
 
 // Template Configurations
 const templates = {
@@ -11,6 +11,11 @@ const templates = {
     "cny": {
         name: "CNY 2026",
         background: (typeof cnyBgBase64 !== 'undefined') ? `url('${cnyBgBase64}')` : "url('invoice_bg_chinese.jpeg')",
+        textColor: "#5A4A3A"
+    },
+    "eid": {
+        name: "EID 2026",
+        background: (typeof eidBgBase64 !== 'undefined') ? `url('${eidBgBase64}')` : "url('invoice_bg_eid.png')",
         textColor: "#5A4A3A"
     },
     "cnyhp": {
@@ -42,7 +47,7 @@ const templates = {
 document.addEventListener('DOMContentLoaded', () => {
     updateAllDropdowns();
     addItemRow();
-    switchTemplate('cny'); // Default template
+    switchTemplate('eid'); // Default template
 });
 
 function switchTemplate(templateId) {
@@ -55,7 +60,10 @@ function switchTemplate(templateId) {
     // Update background
     if (config.background.startsWith('url')) {
         captureArea.style.backgroundImage = config.background;
-        captureArea.style.backgroundColor = 'transparent';
+        captureArea.style.backgroundColor = config.bgColor || 'transparent';
+        captureArea.style.backgroundSize = config.bgSize || 'cover';
+        captureArea.style.backgroundPosition = config.bgPosition || 'center';
+        captureArea.style.backgroundRepeat = 'no-repeat';
     } else {
         captureArea.style.backgroundImage = 'none';
         captureArea.style.backgroundColor = config.background;
@@ -101,42 +109,68 @@ function switchTemplate(templateId) {
                 notesContent.innerHTML = 'Custom order will be prepared after deposit confirmation. <br>Remaining payment will be settled before delivery.';
             }
         }
-        // Hide CNY Additional Information
+        // Hide CNY, CNYHP, EID Additional Information
         const cnyInfo1 = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo1) cnyInfo1.classList.add('hidden');
         const cnyhpInfo1 = document.getElementById('cnyhpAdditionalInfo');
         if (cnyhpInfo1) cnyhpInfo1.classList.add('hidden');
+        const eidInfo1 = document.getElementById('eidAdditionalInfo');
+        if (eidInfo1) eidInfo1.classList.add('hidden');
     } else if (templateId === 'cny') {
         invoiceHeader.style.visibility = 'hidden';
         headerSection.style.marginBottom = '180px'; // Configurable: push BILL TO further down for CNY
         if (footerContainer) footerContainer.style.bottom = '280px';
         if (depositSubheader) depositSubheader.style.display = 'none';
-        // Show CNY Additional Information, hide CNYHP
+        // Show CNY Additional Information, hide CNYHP & EID
         const cnyInfo = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo) cnyInfo.classList.remove('hidden');
         const cnyhpInfo = document.getElementById('cnyhpAdditionalInfo');
         if (cnyhpInfo) cnyhpInfo.classList.add('hidden');
+        const eidInfo = document.getElementById('eidAdditionalInfo');
+        if (eidInfo) eidInfo.classList.add('hidden');
+    } else if (templateId === 'eid') {
+        invoiceHeader.style.visibility = 'hidden';
+        headerSection.style.marginBottom = '180px'; // Same as CNY
+        if (footerContainer) footerContainer.style.bottom = '280px';
+        if (depositSubheader) depositSubheader.style.display = 'none';
+        // Show EID Additional Information, hide CNY & CNYHP
+        const eidInfo2 = document.getElementById('eidAdditionalInfo');
+        if (eidInfo2) {
+            eidInfo2.classList.remove('hidden');
+            eidInfo2.style.color = '#3D2E1F';
+        }
+        const cnyInfo = document.getElementById('cnyAdditionalInfo');
+        if (cnyInfo) cnyInfo.classList.add('hidden');
+        const cnyhpInfo = document.getElementById('cnyhpAdditionalInfo');
+        if (cnyhpInfo) cnyhpInfo.classList.add('hidden');
+        // Darken Delivery Fee text for EID
+        const deliveryFeeSection = footerContainer ? footerContainer.querySelector('.flex.items-center.gap-2') : null;
+        if (deliveryFeeSection) deliveryFeeSection.style.color = '#3D2E1F';
     } else if (templateId === 'cnyhp') {
         invoiceHeader.style.visibility = 'visible'; // INVOICE wording visible for CNYHP
         invoiceHeader.style.marginTop = '70px';      // Push INVOICE down
         headerSection.style.marginBottom = '80px';  // Push BILL TO up
         if (footerContainer) footerContainer.style.bottom = '300px';
         if (depositSubheader) depositSubheader.style.display = 'none';
-        // Hide CNY Additional Information, show CNYHP Additional Information
+        // Hide CNY & EID Additional Information, show CNYHP Additional Information
         const cnyInfo = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo) cnyInfo.classList.add('hidden');
         const cnyhpInfo = document.getElementById('cnyhpAdditionalInfo');
         if (cnyhpInfo) cnyhpInfo.classList.remove('hidden');
+        const eidInfo = document.getElementById('eidAdditionalInfo');
+        if (eidInfo) eidInfo.classList.add('hidden');
     } else {
         invoiceHeader.style.visibility = 'visible';
         headerSection.style.marginBottom = ''; // Reverts to CSS default (mb-12)
         if (footerContainer) footerContainer.style.bottom = '360px';
         if (depositSubheader) depositSubheader.style.display = 'none';
-        // Hide CNY Additional Information
+        // Hide CNY, CNYHP, EID Additional Information
         const cnyInfo2 = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo2) cnyInfo2.classList.add('hidden');
         const cnyhpInfo2 = document.getElementById('cnyhpAdditionalInfo');
         if (cnyhpInfo2) cnyhpInfo2.classList.add('hidden');
+        const eidInfo2 = document.getElementById('eidAdditionalInfo');
+        if (eidInfo2) eidInfo2.classList.add('hidden');
     }
 
     // Toggle Item Description Visibility

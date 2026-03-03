@@ -18,6 +18,11 @@ const templates = {
         background: (typeof eidBgBase64 !== 'undefined') ? `url('${eidBgBase64}')` : "url('invoice_bg_eid.png')",
         textColor: "#5A4A3A"
     },
+    "eidhp": {
+        name: "EIDHP 2026",
+        background: (typeof eidhpBgBase64 !== 'undefined') ? `url('${eidhpBgBase64}')` : "url('invoice_bg_eidhp.jpg')",
+        textColor: "#5A4A3A"
+    },
     "cnyhp": {
         name: "CNYHP 2026",
         background: (typeof cnyhpBgBase64 !== 'undefined') ? `url('${cnyhpBgBase64}')` : "url('invoice_bg_chinese_hp.jpeg')",
@@ -72,6 +77,13 @@ function switchTemplate(templateId) {
     // Update text color
     captureArea.style.color = config.textColor;
 
+    // Toggle EIDHP rounded border + transparency overlay
+    if (templateId === 'eidhp') {
+        captureArea.classList.add('eidhp-active');
+    } else {
+        captureArea.classList.remove('eidhp-active');
+    }
+
     // Toggle INVOICE header visibility & Spacing
     const invoiceHeader = document.getElementById('invoice-header');
     const headerSection = document.getElementById('header-section');
@@ -109,31 +121,35 @@ function switchTemplate(templateId) {
                 notesContent.innerHTML = 'Custom order will be prepared after deposit confirmation. <br>Remaining payment will be settled before delivery.';
             }
         }
-        // Hide CNY, CNYHP, EID Additional Information
+        // Hide CNY, CNYHP, EID, EIDHP Additional Information
         const cnyInfo1 = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo1) cnyInfo1.classList.add('hidden');
         const cnyhpInfo1 = document.getElementById('cnyhpAdditionalInfo');
         if (cnyhpInfo1) cnyhpInfo1.classList.add('hidden');
         const eidInfo1 = document.getElementById('eidAdditionalInfo');
         if (eidInfo1) eidInfo1.classList.add('hidden');
+        const eidhpInfo1 = document.getElementById('eidhpAdditionalInfo');
+        if (eidhpInfo1) eidhpInfo1.classList.add('hidden');
     } else if (templateId === 'cny') {
         invoiceHeader.style.visibility = 'hidden';
         headerSection.style.marginBottom = '180px'; // Configurable: push BILL TO further down for CNY
         if (footerContainer) footerContainer.style.bottom = '280px';
         if (depositSubheader) depositSubheader.style.display = 'none';
-        // Show CNY Additional Information, hide CNYHP & EID
+        // Show CNY Additional Information, hide CNYHP, EID & EIDHP
         const cnyInfo = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo) cnyInfo.classList.remove('hidden');
         const cnyhpInfo = document.getElementById('cnyhpAdditionalInfo');
         if (cnyhpInfo) cnyhpInfo.classList.add('hidden');
         const eidInfo = document.getElementById('eidAdditionalInfo');
         if (eidInfo) eidInfo.classList.add('hidden');
+        const eidhpInfo = document.getElementById('eidhpAdditionalInfo');
+        if (eidhpInfo) eidhpInfo.classList.add('hidden');
     } else if (templateId === 'eid') {
         invoiceHeader.style.visibility = 'hidden';
         headerSection.style.marginBottom = '180px'; // Same as CNY
         if (footerContainer) footerContainer.style.bottom = '280px';
         if (depositSubheader) depositSubheader.style.display = 'none';
-        // Show EID Additional Information, hide CNY & CNYHP
+        // Show EID Additional Information, hide CNY, CNYHP & EIDHP
         const eidInfo2 = document.getElementById('eidAdditionalInfo');
         if (eidInfo2) {
             eidInfo2.classList.remove('hidden');
@@ -143,6 +159,8 @@ function switchTemplate(templateId) {
         if (cnyInfo) cnyInfo.classList.add('hidden');
         const cnyhpInfo = document.getElementById('cnyhpAdditionalInfo');
         if (cnyhpInfo) cnyhpInfo.classList.add('hidden');
+        const eidhpInfo = document.getElementById('eidhpAdditionalInfo');
+        if (eidhpInfo) eidhpInfo.classList.add('hidden');
         // Darken Delivery Fee text for EID
         const deliveryFeeSection = footerContainer ? footerContainer.querySelector('.flex.items-center.gap-2') : null;
         if (deliveryFeeSection) deliveryFeeSection.style.color = '#3D2E1F';
@@ -152,25 +170,44 @@ function switchTemplate(templateId) {
         headerSection.style.marginBottom = '80px';  // Push BILL TO up
         if (footerContainer) footerContainer.style.bottom = '300px';
         if (depositSubheader) depositSubheader.style.display = 'none';
-        // Hide CNY & EID Additional Information, show CNYHP Additional Information
+        // Hide CNY, EID & EIDHP Additional Information, show CNYHP Additional Information
         const cnyInfo = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo) cnyInfo.classList.add('hidden');
         const cnyhpInfo = document.getElementById('cnyhpAdditionalInfo');
         if (cnyhpInfo) cnyhpInfo.classList.remove('hidden');
         const eidInfo = document.getElementById('eidAdditionalInfo');
         if (eidInfo) eidInfo.classList.add('hidden');
+        const eidhpInfo = document.getElementById('eidhpAdditionalInfo');
+        if (eidhpInfo) eidhpInfo.classList.add('hidden');
+    } else if (templateId === 'eidhp') {
+        invoiceHeader.style.visibility = 'visible'; // INVOICE wording visible for EIDHP
+        invoiceHeader.style.marginTop = '70px';      // Push INVOICE down
+        headerSection.style.marginBottom = '80px';  // Push BILL TO up
+        if (footerContainer) footerContainer.style.bottom = '300px';
+        if (depositSubheader) depositSubheader.style.display = 'none';
+        // Show EIDHP Additional Information, hide CNY, CNYHP & EID
+        const cnyInfo = document.getElementById('cnyAdditionalInfo');
+        if (cnyInfo) cnyInfo.classList.add('hidden');
+        const cnyhpInfo = document.getElementById('cnyhpAdditionalInfo');
+        if (cnyhpInfo) cnyhpInfo.classList.add('hidden');
+        const eidInfo = document.getElementById('eidAdditionalInfo');
+        if (eidInfo) eidInfo.classList.add('hidden');
+        const eidhpInfo = document.getElementById('eidhpAdditionalInfo');
+        if (eidhpInfo) eidhpInfo.classList.remove('hidden');
     } else {
         invoiceHeader.style.visibility = 'visible';
         headerSection.style.marginBottom = ''; // Reverts to CSS default (mb-12)
         if (footerContainer) footerContainer.style.bottom = '360px';
         if (depositSubheader) depositSubheader.style.display = 'none';
-        // Hide CNY, CNYHP, EID Additional Information
+        // Hide CNY, CNYHP, EID, EIDHP Additional Information
         const cnyInfo2 = document.getElementById('cnyAdditionalInfo');
         if (cnyInfo2) cnyInfo2.classList.add('hidden');
         const cnyhpInfo2 = document.getElementById('cnyhpAdditionalInfo');
         if (cnyhpInfo2) cnyhpInfo2.classList.add('hidden');
         const eidInfo2 = document.getElementById('eidAdditionalInfo');
         if (eidInfo2) eidInfo2.classList.add('hidden');
+        const eidhpInfo2 = document.getElementById('eidhpAdditionalInfo');
+        if (eidhpInfo2) eidhpInfo2.classList.add('hidden');
     }
 
     // Toggle Item Description Visibility

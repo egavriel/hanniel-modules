@@ -66,6 +66,42 @@ input[type="number"]::-webkit-outer-spin-button {
     outline: none;
 }
 
+/* EIDHP Template: Semi-transparent background overlay + rounded green border */
+.eidhp-active {
+    position: relative;
+}
+
+.eidhp-active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.eidhp-active::after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    border: 3px solid #2D6A4F;
+    border-radius: 24px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Ensure all content in EIDHP template sits above the overlay */
+.eidhp-active > * {
+    position: relative;
+    z-index: 3;
+}
+
 /* Placeholder Graphics Styling (if regular images fail or for fallback) */
 .decoration-area img {
     filter: sepia(0.3) saturate(0.8);

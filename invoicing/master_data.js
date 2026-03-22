@@ -18,6 +18,7 @@ const MASTER_DATA = {
     "Amara Set::eidhp": { name: "Amara Set", price: 250000, template: "eidhp" },
     "Safiya Set::eidhp": { name: "Safiya Set", price: 459000, template: "eidhp" },
     "Noor Royale Set::eidhp": { name: "Noor Royale Set", price: 888000, template: "eidhp" },
+"Ala Carte of Jar::eidhp": { name: "Ala Carte of Jar", price: 99000, template: "eidhp" },
     "Strawberry overnight oats::eidhp": { name: "Strawberry overnight oats", price: 42000, template: "eidhp" },
     "Double choco overnight oats::eidhp": { name: "Double choco overnight oats", price: 42000, template: "eidhp" },
     "Tiramisu overnight oats::eidhp": { name: "Tiramisu overnight oats", price: 42000, template: "eidhp" },

@@ -1,5 +1,6 @@
 import puppeteer from "@cloudflare/puppeteer";
 import { calculateInvoice } from "../../_shared/calculator";
+import { createInvoice } from "../../_shared/db";
 import { buildInvoiceHtml, getBackgroundInfo } from "../../_shared/html-builder";
 import type { InvoiceInput } from "../../_shared/types";
 
@@ -11,6 +12,7 @@ const CORS_HEADERS = {
 
 interface Env {
   BROWSER: Fetcher;
+  DB: D1Database;
 }
 
 export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
@@ -73,6 +75,32 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     );
   }
 
+  // Optionally store in database
+  let invoiceNo: string | undefined;
+  let invoiceDate: string | undefined;
+  if (body.store) {
+    try {
+      const stored = await createInvoice(env.DB, {
+        result: calcResult.result,
+        customer_id: body.customer_id,
+        customer_phone: body.customer_phone,
+        delivery_address_id: body.delivery_address_id,
+        delivery_address: body.delivery_address,
+        notes: body.notes,
+        created_by: body.created_by,
+      });
+      invoiceNo = stored.invoice_no;
+      invoiceDate = stored.invoice_date;
+      calcResult.result.invoice_no = invoiceNo;
+      calcResult.result.invoice_date = invoiceDate;
+    } catch {
+      // Non-fatal: generate image even if store fails
+    }
+  } else if (body.invoice_no) {
+    calcResult.result.invoice_no = body.invoice_no;
+    calcResult.result.invoice_date = body.invoice_date ?? new Date().toISOString().split("T")[0];
+  }
+
   // Build self-contained HTML
   const html = buildInvoiceHtml(calcResult.result, bgBase64);
 
@@ -117,14 +145,15 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   const safeName = calcResult.result.customer_name.replace(/[^a-zA-Z0-9.\- ]/g, "");
   const filename = `Invoice_${safeName}_${timestamp}.jpg`;
 
-  return new Response(jpegBuffer, {
-    status: 200,
-    headers: {
-      ...CORS_HEADERS,
-      "Content-Type": "image/jpeg",
-      "Content-Disposition": `inline; filename="${filename}"`,
-    },
-  });
+  const responseHeaders: Record<string, string> = {
+    ...CORS_HEADERS,
+    "Content-Type": "image/jpeg",
+    "Content-Disposition": `inline; filename="${filename}"`,
+  };
+  if (invoiceNo) responseHeaders["X-Invoice-No"] = invoiceNo;
+  if (invoiceDate) responseHeaders["X-Invoice-Date"] = invoiceDate;
+
+  return new Response(jpegBuffer, { status: 200, headers: responseHeaders });
 };
 
 function arrayBufferToBase64(buffer: ArrayBuffer): string {

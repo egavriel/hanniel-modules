@@ -75,6 +75,16 @@ function formatIDR(num: number): string {
   return num.toLocaleString("id-ID");
 }
 
+function formatInvoiceDate(dateStr: string): string {
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const parts = dateStr.split("-");
+  if (parts.length !== 3) return dateStr;
+  const day = parseInt(parts[2], 10);
+  const month = months[parseInt(parts[1], 10) - 1] ?? parts[1];
+  const year = parts[0];
+  return `${day} ${month} ${year}`;
+}
+
 /**
  * Builds a self-contained HTML string for the invoice, ready for Puppeteer screenshot.
  * The HTML includes inline CSS, embedded fonts (via Google Fonts link), and the
@@ -207,6 +217,19 @@ export function buildInvoiceHtml(result: InvoiceResult, bgBase64: string): strin
     ? `<div style="font-size:1.5rem; font-weight:bold; text-align:right; transform:translateX(-105px);">${config.depositSubheader}</div>`
     : "";
 
+  // Invoice metadata (invoice_no and invoice_date)
+  let invoiceMetaHtml = "";
+  if (result.invoice_no || result.invoice_date) {
+    const formattedDate = result.invoice_date
+      ? formatInvoiceDate(result.invoice_date)
+      : "";
+    invoiceMetaHtml = `
+      <div style="margin-top:8px; text-align:right; font-family:'Karla',sans-serif; line-height:1.8;">
+        ${result.invoice_no ? `<div style="font-size:0.85rem; color:#555;"><span style="font-weight:500; color:#666; display:inline-block; width:90px; text-align:right;">Invoice No.</span> <span style="font-weight:600; color:#444; margin-left:4px;">: ${escapeHtml(result.invoice_no)}</span></div>` : ""}
+        ${formattedDate ? `<div style="font-size:0.85rem; color:#555;"><span style="font-weight:500; color:#666; display:inline-block; width:90px; text-align:right;">Invoice Date</span> <span style="font-weight:600; color:#444; margin-left:4px;">: ${formattedDate}</span></div>` : ""}
+      </div>`;
+  }
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -241,6 +264,7 @@ export function buildInvoiceHtml(result: InvoiceResult, bgBase64: string): strin
       <div style="margin-bottom:${config.headerMarginBottom || "48px"}; text-align:right;">
         ${invoiceHeaderHtml}
         ${depositSubheaderHtml}
+        ${invoiceMetaHtml}
       </div>
 
       <!-- Info Section -->

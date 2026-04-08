@@ -3,5 +3,10 @@ compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "invoicing"
 
+[[d1_databases]]
+binding = "DB"
+database_name = "hanniel-invoices"
+database_id = "757eeef6-64dc-4783-b2f6-61329f8bce2e"
+
 [browser]
 binding = "BROWSER"

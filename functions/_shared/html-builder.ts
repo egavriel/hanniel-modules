@@ -224,9 +224,11 @@ export function buildInvoiceHtml(result: InvoiceResult, bgBase64: string): strin
       ? formatInvoiceDate(result.invoice_date)
       : "";
     invoiceMetaHtml = `
-      <div style="margin-top:8px; text-align:right; font-family:'Karla',sans-serif; line-height:1.8;">
-        ${result.invoice_no ? `<div style="font-size:0.85rem; color:#555;"><span style="font-weight:500; color:#666; display:inline-block; width:90px; text-align:right;">Invoice No.</span> <span style="font-weight:600; color:#444; margin-left:4px;">: ${escapeHtml(result.invoice_no)}</span></div>` : ""}
-        ${formattedDate ? `<div style="font-size:0.85rem; color:#555;"><span style="font-weight:500; color:#666; display:inline-block; width:90px; text-align:right;">Invoice Date</span> <span style="font-weight:600; color:#444; margin-left:4px;">: ${formattedDate}</span></div>` : ""}
+      <div style="margin-top:8px; display:flex; justify-content:flex-end; font-family:'Karla',sans-serif;">
+        <div style="display:grid; grid-template-columns:auto auto auto; column-gap:6px; row-gap:4px; font-size:0.85rem; align-items:baseline;">
+          ${result.invoice_no ? `<span style="font-weight:500; color:#666; text-align:left;">Invoice No.</span><span style="font-weight:600; color:#444;">:</span><span style="font-weight:600; color:#444;">${escapeHtml(result.invoice_no)}</span>` : ""}
+          ${formattedDate ? `<span style="font-weight:500; color:#666; text-align:left;">Invoice Date</span><span style="font-weight:600; color:#444;">:</span><span style="font-weight:600; color:#444;">${formattedDate}</span>` : ""}
+        </div>
       </div>`;
   }
 

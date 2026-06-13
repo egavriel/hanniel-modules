@@ -5,7 +5,7 @@ export type CalculateResult =
   | { ok: true; result: InvoiceResult }
   | { ok: false; error: ApiError };
 
-export function calculateInvoice(input: InvoiceInput): CalculateResult {
+export async function calculateInvoice(db: D1Database, input: InvoiceInput): Promise<CalculateResult> {
   // Validate template
   if (!input.template || !isValidTemplate(input.template)) {
     return { ok: false, error: { error: "Unknown template", code: "INVALID_TEMPLATE", field: "template" } };
@@ -23,7 +23,7 @@ export function calculateInvoice(input: InvoiceInput): CalculateResult {
 
   for (let i = 0; i < input.items.length; i++) {
     const item = input.items[i];
-    const product = getProductById(item.product_id);
+    const product = await getProductById(db, item.product_id);
     if (!product) {
       return {
         ok: false,

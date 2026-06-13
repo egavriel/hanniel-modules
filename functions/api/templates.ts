@@ -6,11 +6,15 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
-export const onRequest: PagesFunction = async ({ request }) => {
+interface Env {
+  DB: D1Database;
+}
+
+export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (request.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: CORS_HEADERS });
   }
-  const templates = getAllTemplates();
+  const templates = await getAllTemplates(env.DB);
   return new Response(JSON.stringify({ templates }), {
     status: 200,
     headers: {

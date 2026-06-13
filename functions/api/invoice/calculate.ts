@@ -7,7 +7,11 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
-export const onRequest: PagesFunction = async ({ request }) => {
+interface Env {
+  DB: D1Database;
+}
+
+export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (request.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: CORS_HEADERS });
   }
@@ -29,7 +33,7 @@ export const onRequest: PagesFunction = async ({ request }) => {
     });
   }
 
-  const result = calculateInvoice(body);
+  const result = await calculateInvoice(env.DB, body);
 
   if (!result.ok) {
     return new Response(JSON.stringify(result.error), {

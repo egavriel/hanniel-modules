@@ -1,7 +1,4 @@
-import catalogData from "../../shared/catalog.json";
 import type { Product, TemplateInfo } from "./types";
-
-const PRODUCTS = catalogData.products as Record<string, Product>;
 
 export const TEMPLATE_FEATURES: Record<string, TemplateInfo["features"]> = {
   christmas: { discount: true, courtesy_adjustment: false, deposit: false, item_description: false, balance_due: false },
@@ -25,11 +22,16 @@ const TEMPLATE_LABELS: Record<string, string> = {
   "hanniel-fi": "Hanniel Final Invoice",
 };
 
-export function getAllTemplates(): TemplateInfo[] {
+export async function getAllTemplates(db: D1Database): Promise<TemplateInfo[]> {
+  const rows = await db
+    .prepare("SELECT template, COUNT(*) as cnt FROM products WHERE active = 1 GROUP BY template")
+    .all<{ template: string; cnt: number }>();
+
   const counts: Record<string, number> = {};
-  for (const product of Object.values(PRODUCTS)) {
-    counts[product.template] = (counts[product.template] || 0) + 1;
+  for (const row of rows.results) {
+    counts[row.template] = row.cnt;
   }
+
   return Object.keys(TEMPLATE_FEATURES).map((id) => ({
     id,
     label: TEMPLATE_LABELS[id] ?? id,
@@ -38,18 +40,35 @@ export function getAllTemplates(): TemplateInfo[] {
   }));
 }
 
-export function getProductsByTemplate(template: string): Record<string, Product> {
+export async function getProductsByTemplate(db: D1Database, template: string): Promise<Record<string, Product>> {
+  const rows = await db
+    .prepare("SELECT id, name, price, template FROM products WHERE template = ?1 AND active = 1")
+    .bind(template)
+    .all<{ id: string; name: string; price: number; template: string }>();
+
   return Object.fromEntries(
-    Object.entries(PRODUCTS).filter(([, p]) => p.template === template)
+    rows.results.map((r) => [r.id, { name: r.name, price: r.price, template: r.template }])
   );
 }
 
-export function getAllProducts(): Record<string, Product> {
-  return PRODUCTS;
+export async function getAllProducts(db: D1Database, includeInactive = false): Promise<Record<string, Product>> {
+  const sql = includeInactive
+    ? "SELECT id, name, price, template FROM products"
+    : "SELECT id, name, price, template FROM products WHERE active = 1";
+  const rows = await db.prepare(sql).all<{ id: string; name: string; price: number; template: string }>();
+
+  return Object.fromEntries(
+    rows.results.map((r) => [r.id, { name: r.name, price: r.price, template: r.template }])
+  );
 }
 
-export function getProductById(id: string): Product | undefined {
-  return PRODUCTS[id];
+export async function getProductById(db: D1Database, id: string): Promise<Product | undefined> {
+  const row = await db
+    .prepare("SELECT name, price, template FROM products WHERE id = ?1 AND active = 1")
+    .bind(id)
+    .first<{ name: string; price: number; template: string }>();
+
+  return row ?? undefined;
 }
 
 export function isValidTemplate(template: string): boolean {

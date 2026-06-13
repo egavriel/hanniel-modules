@@ -1,20 +1,28 @@
-import type { InvoiceResult, StoredInvoice, Customer, CustomerAddress, CustomerEvent } from "./types";
+import type { InvoiceResult, StoredInvoice, Customer, CustomerAddress, CustomerEvent, Product } from "./types";
 
 // --- Invoice Number Generation ---
+// Format: LH-YYMM-####  (e.g. LH-2604-0001)
+// Sequence resets each month, not each year — more private and easier to track
 
 export async function generateInvoiceNo(db: D1Database): Promise<string> {
-  const year = new Date().getFullYear();
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1; // 1–12
+  const yy = String(year).slice(2);  // 2-digit year
+  const mm = String(month).padStart(2, "0"); // 2-digit month
+  const ym = `${yy}${mm}`; // e.g. "2604"
+
   const result = await db
     .prepare(
-      `INSERT INTO invoice_sequences (year, last_seq) VALUES (?1, 1)
-       ON CONFLICT(year) DO UPDATE SET last_seq = last_seq + 1
+      `INSERT INTO invoice_sequences (year, month, last_seq) VALUES (?1, ?2, 1)
+       ON CONFLICT(year, month) DO UPDATE SET last_seq = last_seq + 1
        RETURNING last_seq`
     )
-    .bind(year)
+    .bind(year, month)
     .first<{ last_seq: number }>();
 
   const seq = result!.last_seq;
-  return `LH-${year}-${String(seq).padStart(4, "0")}`;
+  return `LH-${ym}-${String(seq).padStart(4, "0")}`;
 }
 
 // --- Invoice Operations ---
@@ -363,4 +371,96 @@ export async function addCustomerEvent(db: D1Database, data: {
 
   const evt = await db.prepare("SELECT * FROM customer_events WHERE rowid = last_insert_rowid()").first<CustomerEvent>();
   return evt!;
+}
+
+// --- Product Operations ---
+
+interface DbProduct {
+  id: string;
+  name: string;
+  price: number;
+  template: string;
+  active: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export async function createProduct(
+  db: D1Database,
+  data: { name: string; price: number; template: string }
+): Promise<DbProduct> {
+  const id = `${data.name}::${data.template}`;
+
+  // Check if product already exists (including inactive)
+  const existing = await db.prepare("SELECT id, active FROM products WHERE id = ?1").bind(id).first<{ id: string; active: number }>();
+  if (existing) {
+    if (existing.active === 0) {
+      // Reactivate with updated price
+      return reactivateProduct(db, id, data.price);
+    }
+    throw new Error(`Product "${id}" already exists`);
+  }
+
+  const now = new Date().toISOString();
+  await db
+    .prepare("INSERT INTO products (id, name, price, template, active, created_at, updated_at) VALUES (?1, ?2, ?3, ?4, 1, ?5, ?6)")
+    .bind(id, data.name, data.price, data.template, now, now)
+    .run();
+
+  return { id, name: data.name, price: data.price, template: data.template, active: 1, created_at: now, updated_at: now };
+}
+
+export async function updateProduct(
+  db: D1Database,
+  id: string,
+  data: { name?: string; price?: number }
+): Promise<DbProduct> {
+  const existing = await db.prepare("SELECT * FROM products WHERE id = ?1").bind(id).first<DbProduct>();
+  if (!existing) throw new Error(`Product "${id}" not found`);
+
+  const sets: string[] = [];
+  const binds: unknown[] = [];
+  let idx = 1;
+
+  if (data.name !== undefined) { sets.push(`name = ?${idx++}`); binds.push(data.name); }
+  if (data.price !== undefined) { sets.push(`price = ?${idx++}`); binds.push(data.price); }
+
+  if (sets.length === 0) throw new Error("Nothing to update");
+
+  sets.push(`updated_at = ?${idx++}`);
+  const now = new Date().toISOString();
+  binds.push(now);
+  binds.push(id);
+
+  await db.prepare(`UPDATE products SET ${sets.join(", ")} WHERE id = ?${idx}`).bind(...binds).run();
+
+  return {
+    ...existing,
+    name: data.name ?? existing.name,
+    price: data.price ?? existing.price,
+    updated_at: now,
+  };
+}
+
+export async function deactivateProduct(db: D1Database, id: string): Promise<DbProduct> {
+  const existing = await db.prepare("SELECT * FROM products WHERE id = ?1").bind(id).first<DbProduct>();
+  if (!existing) throw new Error(`Product "${id}" not found`);
+  if (existing.active === 0) throw new Error(`Product "${id}" is already inactive`);
+
+  const now = new Date().toISOString();
+  await db.prepare("UPDATE products SET active = 0, updated_at = ?1 WHERE id = ?2").bind(now, id).run();
+
+  return { ...existing, active: 0, updated_at: now };
+}
+
+export async function reactivateProduct(db: D1Database, id: string, newPrice?: number): Promise<DbProduct> {
+  const existing = await db.prepare("SELECT * FROM products WHERE id = ?1").bind(id).first<DbProduct>();
+  if (!existing) throw new Error(`Product "${id}" not found`);
+  if (existing.active === 1) throw new Error(`Product "${id}" is already active`);
+
+  const now = new Date().toISOString();
+  const price = newPrice ?? existing.price;
+  await db.prepare("UPDATE products SET active = 1, price = ?1, updated_at = ?2 WHERE id = ?3").bind(price, now, id).run();
+
+  return { ...existing, active: 1, price, updated_at: now };
 }

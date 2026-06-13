@@ -67,7 +67,7 @@ const TEMPLATE_CONFIGS: Record<string, TemplateConfig> = {
     bgFile: "invoice_bg_hanniel.png", bgMime: "image/png", textColor: "#5A4A3A",
     invoiceHeaderVisible: false, headerMarginBottom: "150px", footerBottom: "140px",
     depositSubheader: "Final Invoice",
-    notesHtml: "Thank you for your order. <br>Kindly complete the remaining payment prior to delivery.",
+    notesHtml: "Thank you for your order. <br>Kindly complete the remaining payment.",
   },
 };
 
@@ -162,25 +162,25 @@ export function buildInvoiceHtml(result: InvoiceResult, bgBase64: string): strin
   let dpFiFieldsHtml = "";
   if (isDPorFI) {
     dpFiFieldsHtml += `
-    <div style="display:flex; align-items:center; gap:8px; font-size:1.25rem; font-weight:bold; color:#8B7355; margin-bottom:8px; margin-right:32px;">
-      <span>Total Order Value</span>
-      <span style="min-width:128px; text-align:right;">${formatIDR(result.total_order_value)}</span>
+    <div style="display:flex; align-items:center; gap:8px; font-size:1.25rem; font-weight:bold; color:#8B7355; margin-bottom:8px;">
+      <span>Total Order</span>
+      <span style="display:inline-block; width:128px; text-align:right;">${formatIDR(result.total_order_value)}</span>
     </div>`;
 
     if (result.deposit_paid > 0) {
       const depositLabel = isFI ? "Deposit Paid" : "Deposit";
       dpFiFieldsHtml += `
-      <div style="display:flex; align-items:center; gap:8px; font-size:1.25rem; font-weight:bold; color:#8B7355; margin-bottom:8px; margin-right:32px;">
+      <div style="display:flex; align-items:center; gap:8px; font-size:1.25rem; font-weight:bold; color:#8B7355; margin-bottom:8px;">
         <span>${depositLabel}</span>
-        <span style="display:inline-block; width:128px; border-bottom:1px solid #8B7355; text-align:right; padding-bottom:2px;">${formatIDR(result.deposit_paid)}</span>
+        <span style="display:inline-block; width:128px; text-align:right;">${formatIDR(result.deposit_paid)}</span>
       </div>`;
     }
 
     if (isFI) {
       dpFiFieldsHtml += `
-      <div style="display:flex; align-items:center; gap:8px; font-size:1.25rem; font-weight:bold; color:#8B7355; margin-bottom:16px; margin-right:32px;">
+      <div style="display:flex; align-items:center; gap:8px; font-size:1.25rem; font-weight:bold; color:#8B7355; margin-bottom:16px;">
         <span>Balance Due</span>
-        <span style="min-width:128px; text-align:right;">${formatIDR(result.balance_due)}</span>
+        <span style="display:inline-block; width:128px; text-align:right;">${formatIDR(result.balance_due)}</span>
       </div>`;
     }
   }
@@ -311,9 +311,25 @@ export function buildInvoiceHtml(result: InvoiceResult, bgBase64: string): strin
         </table>
       </div>
 
-      ${notesHtml}
+<!-- Notes + DP/FI Fields side by side -->
+      ${isDPorFI && notesHtml
+        ? `<div style="margin-top:16px; color:#8B7355; font-family:'Karla',sans-serif;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:48px;">
+              <!-- Left: Notes -->
+              <div style="flex:1;">
+                <h3 style="font-weight:bold; font-size:1.125rem; margin-bottom:8px;">Notes:</h3>
+                <p style="margin-bottom:16px; line-height:1.625;">${config.notesHtml}</p>
+              </div>
+              <!-- Right: DP/FI Fields -->
+              <div style="text-align:right;">
+                ${dpFiFieldsHtml}
+              </div>
+            </div>
+            <hr style="border-color:#B0A090; margin-top:8px;">
+          </div>`
+        : notesHtml}
 
-      <!-- Footer / Totals -->
+      <!-- Footer -->
       <div style="position:absolute; bottom:${config.footerBottom}; left:0; width:100%; padding:0 48px; z-index:20;">
         <div style="display:flex; justify-content:space-between; align-items:flex-end;">
           <!-- Delivery Fee -->
@@ -324,8 +340,6 @@ export function buildInvoiceHtml(result: InvoiceResult, bgBase64: string): strin
 
           <!-- Right Column -->
           <div style="display:flex; flex-direction:column; align-items:flex-end;">
-            ${dpFiFieldsHtml}
-
             <!-- Grand Total Box -->
             <div style="background-color:#D6Cbb3; padding:12px 24px; min-width:300px; display:flex; justify-content:space-between; align-items:center; font-weight:bold; font-size:1.25rem; box-shadow:0 1px 2px rgba(0,0,0,0.05);">
               <span>GRAND TOTAL</span>

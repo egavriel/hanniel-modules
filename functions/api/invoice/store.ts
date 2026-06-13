@@ -32,7 +32,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   // Calculate invoice
-  const calcResult = calculateInvoice(body);
+  const calcResult = await calculateInvoice(env.DB, body);
   if (!calcResult.ok) {
     return new Response(JSON.stringify(calcResult.error), {
       status: 422, headers: { ...CORS_HEADERS, "Content-Type": "application/json" },

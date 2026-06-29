@@ -1,7 +1,7 @@
 {
   "products": {
     "Almond choco oat::christmas": {
-      "name": "Almond choco",
+      "name": "Almond choco cookies",
       "price": 70000,
       "template": "christmas"
     },
@@ -11,7 +11,7 @@
       "template": "christmas"
     },
     "Double choco oat::christmas": {
-      "name": "Double choco oat",
+      "name": "Double choco oat cookies",
       "price": 70000,
       "template": "christmas"
     },
@@ -31,17 +31,17 @@
       "template": "christmas"
     },
     "Raisin oat::christmas": {
-      "name": "Raisin oat",
+      "name": "Raisin oat cookies",
       "price": 70000,
       "template": "christmas"
     },
     "Almond choco oat::cny": {
-      "name": "Almond choco",
+      "name": "Almond choco cookies",
       "price": 70000,
       "template": "cny"
     },
     "Double choco oat::cny": {
-      "name": "Double choco oat",
+      "name": "Double choco oat cookies",
       "price": 70000,
       "template": "cny"
     },
@@ -56,7 +56,7 @@
       "template": "cny"
     },
     "Raisin oat::cny": {
-      "name": "Raisin oat",
+      "name": "Raisin oat cookies",
       "price": 70000,
       "template": "cny"
     },
@@ -71,7 +71,7 @@
       "template": "cny"
     },
     "Almond choco oat::cnyhp": {
-      "name": "Almond choco",
+      "name": "Almond choco cookies",
       "price": 70000,
       "template": "cnyhp"
     },
@@ -91,7 +91,7 @@
       "template": "cnyhp"
     },
     "Double choco oat::cnyhp": {
-      "name": "Double choco oat",
+      "name": "Double choco oat cookies",
       "price": 70000,
       "template": "cnyhp"
     },
@@ -106,7 +106,7 @@
       "template": "cnyhp"
     },
     "Raisin oat::cnyhp": {
-      "name": "Raisin oat",
+      "name": "Raisin oat cookies",
       "price": 70000,
       "template": "cnyhp"
     },
@@ -151,7 +151,7 @@
       "template": "eidhp"
     },
     "Almond choco oat::hanniel": {
-      "name": "Almond choco",
+      "name": "Almond choco cookies",
       "price": 70000,
       "template": "hanniel"
     },
@@ -196,7 +196,7 @@
       "template": "hanniel"
     },
     "Double choco oat::hanniel": {
-      "name": "Double choco oat",
+      "name": "Double choco oat cookies",
       "price": 70000,
       "template": "hanniel"
     },
@@ -216,7 +216,7 @@
       "template": "hanniel"
     },
     "Raisin oat::hanniel": {
-      "name": "Raisin oat",
+      "name": "Raisin oat cookies",
       "price": 70000,
       "template": "hanniel"
     },

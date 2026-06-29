@@ -286,9 +286,7 @@ function updateAllDropdowns() {
     const selects = document.querySelectorAll('.item-select');
     selects.forEach(select => {
         const currentValue = select.value;
-        const filteredItems = Object.keys(masterData).filter(key => masterData[key].template === currentTemplate);
-        const optionsHtml = `<option value="">Select Item</option>` +
-            filteredItems.map(key => `<option value="${key}">${masterData[key].name || textFromKey(key)}</option>`).join('');
+        const optionsHtml = buildOptionsHtml(currentTemplate);
         select.innerHTML = optionsHtml;
         select.value = currentValue; // Try to restore selection
 
@@ -299,6 +297,65 @@ function updateAllDropdowns() {
     });
 }
 
+// Group order + rules for the item dropdown. Items are sorted into one of
+// these buckets by name, then alphabetically within each group. Items that
+// match no rule fall into "Other" at the end.
+const ITEM_GROUP_RULES = [
+    { label: 'Cookies',        match: (n) => !n.toLowerCase().includes('overnight') && /(almond choco|raisin oat|double choco oat)/i.test(n) },
+    { label: 'Overnight Oats', match: (n) => /overnight oats/i.test(n) },
+    { label: 'Hampers',        match: (n) => /hamper/i.test(n) },
+    { label: 'Gimbap',         match: (n) => /gimbap/i.test(n) },
+    { label: 'Loaf',           match: (n) => /loaf/i.test(n) },
+    { label: 'Cakes',          match: (n) => /cake/i.test(n) },
+    { label: 'Sides',          match: (n) => /^(japchae|sides?)/i.test(n) },
+    { label: 'Custom',         match: (n) => /custom/i.test(n) },
+];
+
+function categorizeItem(name) {
+    for (const rule of ITEM_GROUP_RULES) {
+        if (rule.match(name)) return rule.label;
+    }
+    return 'Other';
+}
+
+function buildOptionsHtml(templateId) {
+    const filtered = Object.keys(masterData)
+        .filter((k) => masterData[k].template === templateId)
+        .map((k) => ({ id: k, name: masterData[k].name || textFromKey(k) }));
+
+    const groups = {};
+    for (const it of filtered) {
+        const cat = categorizeItem(it.name);
+        if (!groups[cat]) groups[cat] = [];
+        groups[cat].push(it);
+    }
+
+    let html = '<option value="">Select Item</option>';
+    // Preserve the canonical group order; then any unexpected "Other".
+    const orderedLabels = ITEM_GROUP_RULES.map((r) => r.label);
+    if (groups.Other) orderedLabels.push('Other');
+
+    for (const label of orderedLabels) {
+        const items = (groups[label] || []).slice().sort((a, b) => a.name.localeCompare(b.name));
+        if (items.length === 0) continue;
+        html += `<optgroup label="${label}">`;
+        for (const it of items) {
+            html += `<option value="${it.id}">${escapeHtml(it.name)}</option>`;
+        }
+        html += '</optgroup>';
+    }
+    return html;
+}
+
+function escapeHtml(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 function textFromKey(key) {
     return key.includes('::') ? key.split('::')[0] : key;
 }
@@ -307,15 +364,12 @@ function addItemRow() {
     const tbody = document.getElementById('invoiceItems');
     const tr = document.createElement('tr');
 
-    // Create Dropdown Options
-    const filteredItems = Object.keys(masterData).filter(key => masterData[key].template === currentTemplate);
-    const options = filteredItems.map(key => `<option value="${key}">${masterData[key].name || textFromKey(key)}</option>`).join('');
+    const optionsHtml = buildOptionsHtml(currentTemplate);
 
     tr.innerHTML = `
         <td>
             <select class="item-select" onchange="updateRow(this)">
-                <option value="">Select Item</option>
-                ${options}
+                ${optionsHtml}
             </select>
             <input type="text" placeholder="Item description..." 
                 class="item-description w-full bg-transparent border-none focus:outline-none italic text-[#5A4A3A]/60 ${currentTemplate === 'hanniel-dp' || currentTemplate === 'hanniel-fi' ? '' : 'hidden'}" 

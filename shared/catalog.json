@@ -1,45 +1,274 @@
 {
   "products": {
-    "Etoile one::christmas": { "name": "Etoile one", "price": 149000, "template": "christmas" },
-    "Etoile duo::christmas": { "name": "Etoile duo", "price": 349000, "template": "christmas" },
-    "Etoile four::christmas": { "name": "Etoile four", "price": 599000, "template": "christmas" },
-    "Christmas Hampers Tin::christmas": { "name": "Christmas Hampers Tin", "price": 159000, "template": "christmas" },
-    "Double choco oat::christmas": { "name": "Double choco oat", "price": 70000, "template": "christmas" },
-    "Raisin oat::christmas": { "name": "Raisin oat", "price": 70000, "template": "christmas" },
-    "Almond choco oat::christmas": { "name": "Almond choco", "price": 70000, "template": "christmas" },
-    "Double choco oat::hanniel": { "name": "Double choco oat", "price": 70000, "template": "hanniel" },
-    "Raisin oat::hanniel": { "name": "Raisin oat", "price": 70000, "template": "hanniel" },
-    "Almond choco oat::hanniel": { "name": "Almond choco", "price": 70000, "template": "hanniel" },
-    "Strawberry overnight oats::hanniel": { "name": "Strawberry overnight oats", "price": 42000, "template": "hanniel" },
-    "Double choco overnight oats::hanniel": { "name": "Double choco overnight oats", "price": 42000, "template": "hanniel" },
-    "Tiramisu overnight oats::hanniel": { "name": "Tiramisu overnight oats", "price": 42000, "template": "hanniel" },
-    "Custom Hampers Cookies::hanniel": { "name": "Custom Hampers Cookies", "price": 38000, "template": "hanniel" },
-    "Custom Hampers Cookies::hanniel-dp": { "name": "Custom Hampers Cookies", "price": 38000, "template": "hanniel-dp" },
-    "Custom Hampers Cookies::hanniel-fi": { "name": "Custom Hampers Cookies", "price": 38000, "template": "hanniel-fi" },
-    "Custom tin cookie hamper::hanniel-dp": { "name": "Custom tin cookie hamper", "price": 65000, "template": "hanniel-dp" },
-    "Custom tin cookie hamper::hanniel-fi": { "name": "Custom tin cookie hamper", "price": 65000, "template": "hanniel-fi" },
-    "Eid Royale Tin::eid": { "name": "Eid Royale Tin", "price": 188000, "template": "eid" },
-    "Amara Set::eidhp": { "name": "Amara Set", "price": 299000, "template": "eidhp" },
-    "Safiya Set::eidhp": { "name": "Safiya Set", "price": 599000, "template": "eidhp" },
-    "Noor Royale Set::eidhp": { "name": "Noor Royale Set", "price": 978000, "template": "eidhp" },
-    "Strawberry overnight oats::eidhp": { "name": "Strawberry overnight oats", "price": 42000, "template": "eidhp" },
-    "Double choco overnight oats::eidhp": { "name": "Double choco overnight oats", "price": 42000, "template": "eidhp" },
-    "Tiramisu overnight oats::eidhp": { "name": "Tiramisu overnight oats", "price": 42000, "template": "eidhp" },
-    "Lunar Bloom Tin::cny": { "name": "Lunar Bloom Tin", "price": 188000, "template": "cny" },
-    "Double choco oat::cny": { "name": "Double choco oat", "price": 70000, "template": "cny" },
-    "Raisin oat::cny": { "name": "Raisin oat", "price": 70000, "template": "cny" },
-    "Almond choco oat::cny": { "name": "Almond choco", "price": 70000, "template": "cny" },
-    "Strawberry overnight oats::cny": { "name": "Strawberry overnight oats", "price": 42000, "template": "cny" },
-    "Double choco overnight oats::cny": { "name": "Double choco overnight oats", "price": 42000, "template": "cny" },
-    "Tiramisu overnight oats::cny": { "name": "Tiramisu overnight oats", "price": 42000, "template": "cny" },
-    "Kembang Pusaka::cnyhp": { "name": "Kembang Pusaka", "price": 599000, "template": "cnyhp" },
-    "Seri Kemala::cnyhp": { "name": "Seri Kemala", "price": 349000, "template": "cnyhp" },
-    "Double choco oat::cnyhp": { "name": "Double choco oat", "price": 70000, "template": "cnyhp" },
-    "Raisin oat::cnyhp": { "name": "Raisin oat", "price": 70000, "template": "cnyhp" },
-    "Almond choco oat::cnyhp": { "name": "Almond choco", "price": 70000, "template": "cnyhp" },
-    "Biskuit Kacang Almond Renda::cnyhp": { "name": "Biskuit Kacang Almond Renda", "price": 89000, "template": "cnyhp" },
-    "Kuih Nenas::cnyhp": { "name": "Kuih Nenas", "price": 99000, "template": "cnyhp" },
-    "Biskuit Bijen Hitam::cnyhp": { "name": "Biskuit Bijen Hitam", "price": 89000, "template": "cnyhp" },
-    "Classic Kuih Bangkit::cnyhp": { "name": "Classic Kuih Bangkit", "price": 82000, "template": "cnyhp" }
+    "Etoile one::christmas": {
+      "name": "Etoile one",
+      "price": 149000,
+      "template": "christmas"
+    },
+    "Etoile duo::christmas": {
+      "name": "Etoile duo",
+      "price": 349000,
+      "template": "christmas"
+    },
+    "Etoile four::christmas": {
+      "name": "Etoile four",
+      "price": 599000,
+      "template": "christmas"
+    },
+    "Christmas Hampers Tin::christmas": {
+      "name": "Christmas Hampers Tin",
+      "price": 159000,
+      "template": "christmas"
+    },
+    "Double choco oat::christmas": {
+      "name": "Double choco oat",
+      "price": 70000,
+      "template": "christmas"
+    },
+    "Raisin oat::christmas": {
+      "name": "Raisin oat",
+      "price": 70000,
+      "template": "christmas"
+    },
+    "Almond choco oat::christmas": {
+      "name": "Almond choco",
+      "price": 70000,
+      "template": "christmas"
+    },
+    "Double choco oat::hanniel": {
+      "name": "Double choco oat",
+      "price": 70000,
+      "template": "hanniel"
+    },
+    "Raisin oat::hanniel": {
+      "name": "Raisin oat",
+      "price": 70000,
+      "template": "hanniel"
+    },
+    "Almond choco oat::hanniel": {
+      "name": "Almond choco",
+      "price": 70000,
+      "template": "hanniel"
+    },
+    "Strawberry overnight oats::hanniel": {
+      "name": "Strawberry overnight oats",
+      "price": 42000,
+      "template": "hanniel"
+    },
+    "Double choco overnight oats::hanniel": {
+      "name": "Double choco overnight oats",
+      "price": 42000,
+      "template": "hanniel"
+    },
+    "Tiramisu overnight oats::hanniel": {
+      "name": "Tiramisu overnight oats",
+      "price": 42000,
+      "template": "hanniel"
+    },
+    "Custom tin cookie hamper::hanniel-dp": {
+      "name": "Custom tin cookie hamper",
+      "price": 65000,
+      "template": "hanniel-dp"
+    },
+    "Custom tin cookie hamper::hanniel-fi": {
+      "name": "Custom tin cookie hamper",
+      "price": 65000,
+      "template": "hanniel-fi"
+    },
+    "Eid Royale Tin::eid": {
+      "name": "Eid Royale Tin",
+      "price": 188000,
+      "template": "eid"
+    },
+    "Amara Set::eidhp": {
+      "name": "Amara Set",
+      "price": 299000,
+      "template": "eidhp"
+    },
+    "Safiya Set::eidhp": {
+      "name": "Safiya Set",
+      "price": 599000,
+      "template": "eidhp"
+    },
+    "Noor Royale Set::eidhp": {
+      "name": "Noor Royale Set",
+      "price": 978000,
+      "template": "eidhp"
+    },
+    "Strawberry overnight oats::eidhp": {
+      "name": "Strawberry overnight oats",
+      "price": 42000,
+      "template": "eidhp"
+    },
+    "Double choco overnight oats::eidhp": {
+      "name": "Double choco overnight oats",
+      "price": 42000,
+      "template": "eidhp"
+    },
+    "Tiramisu overnight oats::eidhp": {
+      "name": "Tiramisu overnight oats",
+      "price": 42000,
+      "template": "eidhp"
+    },
+    "Lunar Bloom Tin::cny": {
+      "name": "Lunar Bloom Tin",
+      "price": 188000,
+      "template": "cny"
+    },
+    "Double choco oat::cny": {
+      "name": "Double choco oat",
+      "price": 70000,
+      "template": "cny"
+    },
+    "Raisin oat::cny": {
+      "name": "Raisin oat",
+      "price": 70000,
+      "template": "cny"
+    },
+    "Almond choco oat::cny": {
+      "name": "Almond choco",
+      "price": 70000,
+      "template": "cny"
+    },
+    "Strawberry overnight oats::cny": {
+      "name": "Strawberry overnight oats",
+      "price": 42000,
+      "template": "cny"
+    },
+    "Double choco overnight oats::cny": {
+      "name": "Double choco overnight oats",
+      "price": 42000,
+      "template": "cny"
+    },
+    "Tiramisu overnight oats::cny": {
+      "name": "Tiramisu overnight oats",
+      "price": 42000,
+      "template": "cny"
+    },
+    "Kembang Pusaka::cnyhp": {
+      "name": "Kembang Pusaka",
+      "price": 599000,
+      "template": "cnyhp"
+    },
+    "Seri Kemala::cnyhp": {
+      "name": "Seri Kemala",
+      "price": 349000,
+      "template": "cnyhp"
+    },
+    "Double choco oat::cnyhp": {
+      "name": "Double choco oat",
+      "price": 70000,
+      "template": "cnyhp"
+    },
+    "Raisin oat::cnyhp": {
+      "name": "Raisin oat",
+      "price": 70000,
+      "template": "cnyhp"
+    },
+    "Almond choco oat::cnyhp": {
+      "name": "Almond choco",
+      "price": 70000,
+      "template": "cnyhp"
+    },
+    "Biskuit Kacang Almond Renda::cnyhp": {
+      "name": "Biskuit Kacang Almond Renda",
+      "price": 89000,
+      "template": "cnyhp"
+    },
+    "Kuih Nenas::cnyhp": {
+      "name": "Kuih Nenas",
+      "price": 99000,
+      "template": "cnyhp"
+    },
+    "Biskuit Bijen Hitam::cnyhp": {
+      "name": "Biskuit Bijen Hitam",
+      "price": 89000,
+      "template": "cnyhp"
+    },
+    "Classic Kuih Bangkit::cnyhp": {
+      "name": "Classic Kuih Bangkit",
+      "price": 82000,
+      "template": "cnyhp"
+    },
+    "Banana Loaf::hanniel": {
+      "name": "Banana Loaf",
+      "price": 38000,
+      "template": "hanniel"
+    },
+    "Carrot Cake::hanniel": {
+      "name": "Carrot Cake",
+      "price": 48000,
+      "template": "hanniel"
+    },
+    "Custom Hampers Cookies::hanniel": {
+      "name": "Custom Hampers Cookies",
+      "price": 40000,
+      "template": "hanniel"
+    },
+    "Custom Hampers Cookies::hanniel-dp": {
+      "name": "Custom Hampers Cookies",
+      "price": 40000,
+      "template": "hanniel-dp"
+    },
+    "Banana Loaf::hanniel-dp": {
+      "name": "Banana Loaf",
+      "price": 38000,
+      "template": "hanniel-dp"
+    },
+    "Custom Banana Loaf::hanniel": {
+      "name": "Custom Banana Loaf",
+      "price": 188000,
+      "template": "hanniel"
+    },
+    "Custom Banana Loaf::hanniel-dp": {
+      "name": "Custom Banana Loaf",
+      "price": 188000,
+      "template": "hanniel-dp"
+    },
+    "Custom Banana Loaf::hanniel-fi": {
+      "name": "Custom Banana Loaf",
+      "price": 188000,
+      "template": "hanniel-fi"
+    },
+    "Custom Overnight Oats::hanniel": {
+      "name": "Custom Overnight Oats",
+      "price": 168000,
+      "template": "hanniel"
+    },
+    "Custom Hampers Cookies::hanniel-fi": {
+      "name": "Custom Hampers Cookies",
+      "price": 40000,
+      "template": "hanniel-fi"
+    },
+    "Double choco overnight oats::hanniel-fi": {
+      "name": "Double choco overnight oats",
+      "price": 42000,
+      "template": "hanniel-fi"
+    },
+    "Egg and Veggies Gimbap::hanniel": {
+      "name": "Egg and Veggies Gimbap",
+      "price": 70000,
+      "template": "hanniel"
+    },
+    "Custom Hampers Cookies Banana::hanniel": {
+      "name": "Custom Hampers Cookies Banana",
+      "price": 80000,
+      "template": "hanniel"
+    },
+    "Bulgogi Gimbap::hanniel": {
+      "name": "Bulgogi Gimbap",
+      "price": 78000,
+      "template": "hanniel"
+    },
+    "Chicken Gimbap::hanniel": {
+      "name": "Chicken Gimbap",
+      "price": 73000,
+      "template": "hanniel"
+    },
+    "Japchae::hanniel": {
+      "name": "Japchae",
+      "price": 55000,
+      "template": "hanniel"
+    }
   }
 }

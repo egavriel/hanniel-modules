@@ -442,17 +442,120 @@ function formatIDR(num) {
     return num.toLocaleString('id-ID');
 }
 
+// ---------------------------------------------------------------------------
+// Build the API payload from current DOM state.
+// Used by generateInvoice() to call /api/invoice/store first (reserves a
+// fresh invoice number in D1), then the html2canvas screenshot includes
+// the assigned Invoice No + Date.
+// ---------------------------------------------------------------------------
+function buildStorePayload() {
+    const items = [];
+    document.querySelectorAll('#invoiceItems tr').forEach(row => {
+        const select = row.querySelector('.item-select');
+        const qtyInput = row.querySelector('input[type="number"]');
+        const descInput = row.querySelector('.item-description');
+        const productId = select ? select.value : '';
+        const qty = qtyInput ? (parseInt(qtyInput.value, 10) || 0) : 0;
+        if (!productId || qty < 1) return;
+        const item = { product_id: productId, quantity: qty };
+        if (descInput && descInput.value && descInput.value.trim() !== '') {
+            item.description = descInput.value.trim();
+        }
+        items.push(item);
+    });
+
+    const customerName = (document.getElementById('billName').value || '').trim();
+    const ongkir = parseFloat((document.getElementById('ongkirInput') || {}).value) || 0;
+    const discountSelect = document.getElementById('specialDiscount');
+    const discountRate = discountSelect ? (parseFloat(discountSelect.value) || 0) : 0;
+    const courtesyInput = document.getElementById('courtesyAdjustmentInput');
+    const courtesyAdjustment = courtesyInput ? (parseFloat(courtesyInput.value) || 0) : 0;
+    const depositInput = document.getElementById('depositInput');
+    const depositPaid = depositInput ? (parseFloat(depositInput.value) || 0) : 0;
+
+    return {
+        template: currentTemplate,
+        customer_name: customerName,
+        items,
+        delivery_fee: ongkir,
+        discount_rate: discountRate,
+        courtesy_adjustment: courtesyAdjustment,
+        deposit_paid: depositPaid,
+    };
+}
+
+// Format YYYY-MM-DD as "DD MMM YYYY" (matches html-builder.ts formatInvoiceDate)
+// so the UI shows the same date format as the rendered invoice image.
+function formatInvoiceDateForUi(isoDate) {
+    if (!isoDate) return '';
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const [y, m, d] = isoDate.split('-');
+    if (!y || !m || !d) return isoDate;
+    return `${parseInt(d, 10)} ${months[parseInt(m, 10) - 1]} ${y}`;
+}
+
+async function reserveInvoiceNumber() {
+    const payload = buildStorePayload();
+    if (!payload.customer_name) {
+        throw new Error('Customer name is required (BILL TO field is empty).');
+    }
+    if (payload.items.length === 0) {
+        throw new Error('Add at least one item before generating the invoice.');
+    }
+
+    const res = await fetch('/api/invoice/store', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+        let errMsg = `HTTP ${res.status}`;
+        try {
+            const body = await res.json();
+            errMsg = body.error || JSON.stringify(body);
+        } catch (_) { /* ignore body parse */ }
+        throw new Error(`/api/invoice/store failed: ${errMsg}`);
+    }
+    return res.json();  // { invoice_no, invoice_date, ... }
+}
+
+function showInvoiceMeta(invoiceNo, invoiceDate) {
+    const meta = document.getElementById('invoice-meta');
+    const noEl = document.getElementById('invoice-meta-no-value');
+    const dateEl = document.getElementById('invoice-meta-date-value');
+    if (noEl) noEl.textContent = invoiceNo || '—';
+    if (dateEl) dateEl.textContent = invoiceDate
+        ? formatInvoiceDateForUi(invoiceDate)
+        : '—';
+    if (meta) meta.classList.remove('hidden');
+}
+
 function generateInvoice() {
     const captureArea = document.getElementById('invoice-capture');
-
-    // Temporarily hide controls or specific styles if needed (print:hidden handles most)
 
     if (typeof html2canvas === 'undefined') {
         alert('Error: html2canvas library is not loaded.');
         return;
     }
 
-    html2canvas(captureArea, {
+    // Phase 1: reserve a fresh invoice number in D1 via /api/invoice/store.
+    // This must happen BEFORE html2canvas so the Invoice No + Date block is
+    // populated and visible in the rendered screenshot.
+    reserveInvoiceNumber()
+        .then(stored => {
+            showInvoiceMeta(stored.invoice_no, stored.invoice_date);
+            // Phase 2: render DOM to JPEG via html2canvas.
+            return runHtml2Canvas(captureArea, stored);
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Error generating invoice: ' + err.message);
+        });
+}
+
+function runHtml2Canvas(captureArea, stored) {
+    return html2canvas(captureArea, {
         scale: 1.5, // Reduced from 2 to optimize size
         useCORS: true,
         backgroundColor: '#ffffff', // Ensure white background for JPEG
@@ -531,7 +634,9 @@ function generateInvoice() {
             const timestamp = `${year}${month}${day}_${hours}${minutes}${seconds}`;
 
             const link = document.createElement('a');
-            link.download = `Invoice_${document.getElementById('billName').value || 'Unamed'}_${timestamp}.jpg`;
+            // Prefer the reserved invoice_no in the filename for traceability
+            const idPart = stored && stored.invoice_no ? stored.invoice_no : (document.getElementById('billName').value || 'Unamed');
+            link.download = `Invoice_${idPart}_${timestamp}.jpg`;
             link.href = canvas.toDataURL('image/jpeg', 0.8); // JPEG format with 0.8 quality
             link.click();
         } catch (e) {

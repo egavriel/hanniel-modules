@@ -71,6 +71,24 @@
                     <div id="deposit-subheader"
                         class="text-2xl font-bold hidden text-right transform translate-x-[-105px]">Deposit Invoice
                     </div>
+
+                    <!-- Invoice No + Date (auto-populated by /api/invoice/store on Generate)
+                         Layout mirrors functions/_shared/html-builder.ts and
+                         local-invoice-puppeteer.js (right-aligned, Karla 0.85rem,
+                         label #666, value #444). Hidden until Generate runs. -->
+                    <div id="invoice-meta"
+                        class="hidden mt-2 flex justify-end font-karla"
+                        style="font-family:'Karla',sans-serif;font-size:0.85rem;">
+                        <div style="display:grid;grid-template-columns:auto auto auto;column-gap:6px;row-gap:4px;align-items:baseline;">
+                            <span id="invoice-meta-no-label" style="font-weight:500;color:#666;text-align:left;">Invoice No.</span>
+                            <span style="font-weight:600;color:#444;">:</span>
+                            <span id="invoice-meta-no-value" style="font-weight:600;color:#444;">—</span>
+
+                            <span id="invoice-meta-date-label" style="font-weight:500;color:#666;text-align:left;">Invoice Date</span>
+                            <span style="font-weight:600;color:#444;">:</span>
+                            <span id="invoice-meta-date-value" style="font-weight:600;color:#444;">—</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Info Section -->

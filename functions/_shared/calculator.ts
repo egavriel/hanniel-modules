@@ -1,13 +1,13 @@
 import type { InvoiceInput, InvoiceResult, InvoiceResultItem, ApiError } from "./types";
-import { getProductById, isValidTemplate } from "./catalog";
+import { getProductById, isValidTemplate, type CatalogEnv } from "./catalog";
 
 export type CalculateResult =
   | { ok: true; result: InvoiceResult }
   | { ok: false; error: ApiError };
 
-export async function calculateInvoice(db: D1Database, input: InvoiceInput): Promise<CalculateResult> {
+export async function calculateInvoice(env: CatalogEnv, input: InvoiceInput): Promise<CalculateResult> {
   // Validate template
-  if (!input.template || !isValidTemplate(input.template)) {
+  if (!input.template || !(await isValidTemplate(env, input.template))) {
     return { ok: false, error: { error: "Unknown template", code: "INVALID_TEMPLATE", field: "template" } };
   }
 
@@ -23,7 +23,7 @@ export async function calculateInvoice(db: D1Database, input: InvoiceInput): Pro
 
   for (let i = 0; i < input.items.length; i++) {
     const item = input.items[i];
-    const product = await getProductById(db, item.product_id);
+    const product = await getProductById(env, item.product_id);
     if (!product) {
       return {
         ok: false,

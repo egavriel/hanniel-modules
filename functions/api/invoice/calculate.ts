@@ -33,7 +33,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     });
   }
 
-  const result = await calculateInvoice(env.DB, body);
+  const result = await calculateInvoice(env, body);
 
   if (!result.ok) {
     return new Response(JSON.stringify(result.error), {

@@ -38,7 +38,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   // Calculate invoice
-  const calcResult = await calculateInvoice(env.DB, body);
+  const calcResult = await calculateInvoice(env, body);
   if (!calcResult.ok) {
     return new Response(JSON.stringify(calcResult.error), {
       status: 422,

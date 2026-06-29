@@ -21,27 +21,36 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   // GET — list products
   if (request.method === "GET") {
     const template = url.searchParams.get("template");
-    const includeInactive = url.searchParams.get("include_inactive") === "true";
 
-    if (template !== null) {
-      if (!isValidTemplate(template)) {
-        return new Response(
-          JSON.stringify({ error: `Unknown template: ${template}`, code: "INVALID_TEMPLATE", field: "template" }),
-          { status: 400, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
-        );
+    try {
+      if (template !== null) {
+        if (!(await isValidTemplate(env, template))) {
+          return new Response(
+            JSON.stringify({ error: `Unknown template: ${template}`, code: "INVALID_TEMPLATE", field: "template" }),
+            { status: 400, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
+          );
+        }
+        const products = await getProductsByTemplate(env, template);
+        return new Response(JSON.stringify({ template, products }), {
+          status: 200,
+          headers: { ...CORS_HEADERS, "Content-Type": "application/json", "Cache-Control": "public, max-age=300" },
+        });
       }
-      const products = await getProductsByTemplate(env.DB, template);
-      return new Response(JSON.stringify({ template, products }), {
+
+      const products = await getAllProducts(env);
+      return new Response(JSON.stringify({ products }), {
         status: 200,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json", "Cache-Control": "public, max-age=300" },
       });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Unknown error";
+      const stack = e instanceof Error ? e.stack : undefined;
+      console.error(`[products.ts] GET failed: ${message}`, stack);
+      return new Response(JSON.stringify({ error: message, code: "PRODUCTS_LOOKUP_ERROR" }), {
+        status: 500,
+        headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
+      });
     }
-
-    const products = await getAllProducts(env.DB, includeInactive);
-    return new Response(JSON.stringify({ products }), {
-      status: 200,
-      headers: { ...CORS_HEADERS, "Content-Type": "application/json", "Cache-Control": "public, max-age=300" },
-    });
   }
 
   // POST — create product
@@ -60,7 +69,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
         status: 422, headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
     }
-    if (!isValidTemplate(body.template)) {
+    if (!(await isValidTemplate(env, body.template))) {
       return new Response(JSON.stringify({ error: `Unknown template: ${body.template}`, code: "INVALID_TEMPLATE" }), {
         status: 422, headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });

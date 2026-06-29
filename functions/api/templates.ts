@@ -14,7 +14,7 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
   if (request.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: CORS_HEADERS });
   }
-  const templates = await getAllTemplates(env.DB);
+  const templates = await getAllTemplates(env);
   return new Response(JSON.stringify({ templates }), {
     status: 200,
     headers: {

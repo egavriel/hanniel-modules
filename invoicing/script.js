@@ -48,12 +48,36 @@ const templates = {
     }
 };
 
-// Initialize
+// Initialize — load catalog from API (D1 source of truth), then boot UI
 document.addEventListener('DOMContentLoaded', () => {
-    switchTemplate('hanniel'); // Set template + apply background/visibility BEFORE adding rows, so the row's dropdown is populated correctly on first paint.
-    updateAllDropdowns();
-    addItemRow();
+    loadMasterDataFromApi()
+        .then(() => {
+            switchTemplate('hanniel');
+            updateAllDropdowns();
+            addItemRow();
+        })
+        .catch((err) => {
+            console.warn('[invoicing] API catalog load failed, using master_data.js fallback:', err);
+            masterData = (typeof MASTER_DATA !== 'undefined') ? MASTER_DATA : masterData;
+            switchTemplate('hanniel');
+            updateAllDropdowns();
+            addItemRow();
+        });
 });
+
+/** Fetch full product list from /api/products and replace masterData */
+async function loadMasterDataFromApi() {
+    const res = await fetch('/api/products', { headers: { Accept: 'application/json' } });
+    if (!res.ok) {
+        throw new Error(`GET /api/products HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    const products = data.products;
+    if (!products || typeof products !== 'object') {
+        throw new Error('Invalid /api/products response');
+    }
+    masterData = products;
+}
 
 function switchTemplate(templateId) {
     currentTemplate = templateId;

@@ -1,5 +1,5 @@
 let masterData = (typeof MASTER_DATA !== 'undefined') ? MASTER_DATA : {}; // Populated from master_data.js or fallback
-let currentTemplate = 'eid'; // Track current template for item filtering
+let currentTemplate = 'hanniel'; // Track current template for item filtering
 
 // Template Configurations
 const templates = {
@@ -50,9 +50,9 @@ const templates = {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
+    switchTemplate('hanniel'); // Set template + apply background/visibility BEFORE adding rows, so the row's dropdown is populated correctly on first paint.
     updateAllDropdowns();
     addItemRow();
-    switchTemplate('hanniel'); // Default template (Little Hanniel)
 });
 
 function switchTemplate(templateId) {

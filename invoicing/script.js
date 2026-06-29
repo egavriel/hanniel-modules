@@ -52,7 +52,7 @@ const templates = {
 document.addEventListener('DOMContentLoaded', () => {
     updateAllDropdowns();
     addItemRow();
-    switchTemplate('eid'); // Default template
+    switchTemplate('hanniel'); // Default template (Little Hanniel)
 });
 
 function switchTemplate(templateId) {

@@ -177,7 +177,7 @@
     },
     "Custom Banana Loaf::hanniel": {
       "name": "Custom Banana Loaf",
-      "price": 188000,
+      "price": 150000,
       "template": "hanniel"
     },
     "Custom Hampers Cookies::hanniel": {
@@ -237,7 +237,7 @@
     },
     "Custom Banana Loaf::hanniel-dp": {
       "name": "Custom Banana Loaf",
-      "price": 188000,
+      "price": 150000,
       "template": "hanniel-dp"
     },
     "Custom Hampers Cookies::hanniel-dp": {
@@ -252,7 +252,7 @@
     },
     "Custom Banana Loaf::hanniel-fi": {
       "name": "Custom Banana Loaf",
-      "price": 188000,
+      "price": 150000,
       "template": "hanniel-fi"
     },
     "Custom Hampers Cookies::hanniel-fi": {

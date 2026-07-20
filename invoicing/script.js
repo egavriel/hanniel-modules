@@ -714,9 +714,28 @@ function runHtml2Canvas(captureArea, stored) {
             const link = document.createElement('a');
             // Prefer the reserved invoice_no in the filename for traceability
             const idPart = stored && stored.invoice_no ? stored.invoice_no : (document.getElementById('billName').value || 'Unamed');
-            link.download = `Invoice_${idPart}_${timestamp}.jpg`;
-            link.href = canvas.toDataURL('image/jpeg', 0.8); // JPEG format with 0.8 quality
-            link.click();
+            const filename = `Invoice_${idPart}_${timestamp}.jpg`;
+
+            // Use canvas.toBlob + blob URL + DOM-attach pattern. iOS Safari ignores
+            // <a>.click() on a detached element with a data: URL (the View/Download
+            // popover silently fails). Blob URLs attached to document.body work
+            // reliably across iOS Safari, Android Chrome, and desktop.
+            canvas.toBlob((blob) => {
+                if (!blob) {
+                    alert('Error: could not create image blob for download.');
+                    return;
+                }
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.download = filename;
+                a.href = url;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                // Revoke after iOS has had time to process the click
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
+            }, 'image/jpeg', 0.8);
         } catch (e) {
             console.error(e);
             alert('Error creating download link: ' + e.message);

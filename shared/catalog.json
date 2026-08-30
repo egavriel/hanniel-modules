@@ -210,14 +210,29 @@
       "price": 70000,
       "template": "hanniel"
     },
+    "Hampers Banana Loaf::hanniel": {
+      "name": "Hampers Banana Loaf",
+      "price": 40000,
+      "template": "hanniel"
+    },
     "Japchae::hanniel": {
       "name": "Japchae",
-      "price": 55000,
+      "price": 60000,
       "template": "hanniel"
     },
     "Raisin oat::hanniel": {
       "name": "Raisin oat cookies",
       "price": 70000,
+      "template": "hanniel"
+    },
+    "Seaweed Add-ons::hanniel": {
+      "name": "Seaweed Add-ons",
+      "price": 10000,
+      "template": "hanniel"
+    },
+    "Side Dish (P & A)::hanniel": {
+      "name": "Side Dish (P & A)",
+      "price": 59000,
       "template": "hanniel"
     },
     "Strawberry overnight oats::hanniel": {
@@ -250,6 +265,21 @@
       "price": 65000,
       "template": "hanniel-dp"
     },
+    "Double choco oat::hanniel-dp": {
+      "name": "Double choco oat",
+      "price": 70000,
+      "template": "hanniel-dp"
+    },
+    "Hampers Banana Loaf::hanniel-dp": {
+      "name": "Hampers Banana Loaf",
+      "price": 40000,
+      "template": "hanniel-dp"
+    },
+    "Raisin oat::hanniel-dp": {
+      "name": "Raisin oat",
+      "price": 70000,
+      "template": "hanniel-dp"
+    },
     "Custom Banana Loaf::hanniel-fi": {
       "name": "Custom Banana Loaf",
       "price": 150000,
@@ -265,9 +295,24 @@
       "price": 65000,
       "template": "hanniel-fi"
     },
+    "Double choco oat::hanniel-fi": {
+      "name": "Double choco oat",
+      "price": 70000,
+      "template": "hanniel-fi"
+    },
     "Double choco overnight oats::hanniel-fi": {
       "name": "Double choco overnight oats",
       "price": 42000,
+      "template": "hanniel-fi"
+    },
+    "Hampers Banana Loaf::hanniel-fi": {
+      "name": "Hampers Banana Loaf",
+      "price": 40000,
+      "template": "hanniel-fi"
+    },
+    "Raisin oat::hanniel-fi": {
+      "name": "Raisin oat",
+      "price": 70000,
       "template": "hanniel-fi"
     }
   }

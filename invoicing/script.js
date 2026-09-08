@@ -301,7 +301,7 @@ function updateAllDropdowns() {
 // these buckets by name, then alphabetically within each group. Items that
 // match no rule fall into "Other" at the end.
 const ITEM_GROUP_RULES = [
-    { label: 'Cookies',        match: (n) => !n.toLowerCase().includes('overnight') && /(almond choco|raisin oat|double choco oat)/i.test(n) },
+    { label: 'Cookies',        match: (n) => !n.toLowerCase().includes('overnight') && /(almond choco|raisin oat|double choco oat|cookies jar)/i.test(n) },
     { label: 'Overnight Oats', match: (n) => /overnight oats/i.test(n) },
     { label: 'Hampers',        match: (n) => /hamper/i.test(n) },
     { label: 'Gimbap',         match: (n) => /gimbap/i.test(n) },

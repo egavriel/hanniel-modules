@@ -175,9 +175,19 @@
       "price": 73000,
       "template": "hanniel"
     },
+    "Cookies Jar (L)::hanniel": {
+      "name": "Cookies Jar (L)",
+      "price": 170000,
+      "template": "hanniel"
+    },
+    "Cookies Jar (S)::hanniel": {
+      "name": "Cookies Jar (S)",
+      "price": 129000,
+      "template": "hanniel"
+    },
     "Custom Banana Loaf::hanniel": {
       "name": "Custom Banana Loaf",
-      "price": 150000,
+      "price": 160000,
       "template": "hanniel"
     },
     "Custom Hampers Cookies::hanniel": {
@@ -250,9 +260,19 @@
       "price": 38000,
       "template": "hanniel-dp"
     },
+    "Cookies Jar (L)::hanniel-dp": {
+      "name": "Cookies Jar (L)",
+      "price": 170000,
+      "template": "hanniel-dp"
+    },
+    "Cookies Jar (S)::hanniel-dp": {
+      "name": "Cookies Jar (S)",
+      "price": 129000,
+      "template": "hanniel-dp"
+    },
     "Custom Banana Loaf::hanniel-dp": {
       "name": "Custom Banana Loaf",
-      "price": 150000,
+      "price": 160000,
       "template": "hanniel-dp"
     },
     "Custom Hampers Cookies::hanniel-dp": {
@@ -280,9 +300,19 @@
       "price": 70000,
       "template": "hanniel-dp"
     },
+    "Cookies Jar (L)::hanniel-fi": {
+      "name": "Cookies Jar (L)",
+      "price": 170000,
+      "template": "hanniel-fi"
+    },
+    "Cookies Jar (S)::hanniel-fi": {
+      "name": "Cookies Jar (S)",
+      "price": 129000,
+      "template": "hanniel-fi"
+    },
     "Custom Banana Loaf::hanniel-fi": {
       "name": "Custom Banana Loaf",
-      "price": 150000,
+      "price": 160000,
       "template": "hanniel-fi"
     },
     "Custom Hampers Cookies::hanniel-fi": {

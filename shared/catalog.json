@@ -190,6 +190,11 @@
       "price": 160000,
       "template": "hanniel"
     },
+    "Custom Hampers Banana Loaf::hanniel": {
+      "name": "Custom Hampers Banana Loaf",
+      "price": 45000,
+      "template": "hanniel"
+    },
     "Custom Hampers Cookies::hanniel": {
       "name": "Custom Hampers Cookies",
       "price": 40000,
@@ -220,6 +225,11 @@
       "price": 70000,
       "template": "hanniel"
     },
+    "Full Month Hampers (Cost Price)::hanniel": {
+      "name": "Full Month Hampers (Cost Price)",
+      "price": 70000,
+      "template": "hanniel"
+    },
     "Hampers Banana Loaf::hanniel": {
       "name": "Hampers Banana Loaf",
       "price": 40000,
@@ -227,6 +237,46 @@
     },
     "Japchae::hanniel": {
       "name": "Japchae",
+      "price": 60000,
+      "template": "hanniel"
+    },
+    "Japchae (Custom)::hanniel": {
+      "name": "Japchae (Custom)",
+      "price": 52000,
+      "template": "hanniel"
+    },
+    "Kombucha (1L)::hanniel": {
+      "name": "Kombucha (1L)",
+      "price": 125000,
+      "template": "hanniel"
+    },
+    "Kombucha (250ml)::hanniel": {
+      "name": "Kombucha (250ml)",
+      "price": 30000,
+      "template": "hanniel"
+    },
+    "MSW Snowskin (6pc)::hanniel": {
+      "name": "MSW Snowskin (6pc)",
+      "price": 419000,
+      "template": "hanniel"
+    },
+    "MSW Snowskin Ala Carte::hanniel": {
+      "name": "MSW Snowskin Ala Carte",
+      "price": 70000,
+      "template": "hanniel"
+    },
+    "Madeleine Bear (2pc)::hanniel": {
+      "name": "Madeleine Bear (2pc)",
+      "price": 23000,
+      "template": "hanniel"
+    },
+    "Petite Bun::hanniel": {
+      "name": "Petite Bun",
+      "price": 12000,
+      "template": "hanniel"
+    },
+    "Petite Bun (B5G1)::hanniel": {
+      "name": "Petite Bun (B5G1)",
       "price": 60000,
       "template": "hanniel"
     },
@@ -243,6 +293,16 @@
     "Side Dish (P & A)::hanniel": {
       "name": "Side Dish (P & A)",
       "price": 59000,
+      "template": "hanniel"
+    },
+    "Single Madeleine::hanniel": {
+      "name": "Single Madeleine",
+      "price": 13000,
+      "template": "hanniel"
+    },
+    "Snowskin Assorted 6 Var::hanniel": {
+      "name": "Snowskin Assorted 6 Var",
+      "price": 239000,
       "template": "hanniel"
     },
     "Strawberry overnight oats::hanniel": {
@@ -275,6 +335,11 @@
       "price": 160000,
       "template": "hanniel-dp"
     },
+    "Custom Hampers Banana Loaf::hanniel-dp": {
+      "name": "Custom Hampers Banana Loaf",
+      "price": 45000,
+      "template": "hanniel-dp"
+    },
     "Custom Hampers Cookies::hanniel-dp": {
       "name": "Custom Hampers Cookies",
       "price": 40000,
@@ -290,14 +355,69 @@
       "price": 70000,
       "template": "hanniel-dp"
     },
+    "Full Month Hampers (Cost Price)::hanniel-dp": {
+      "name": "Full Month Hampers (Cost Price)",
+      "price": 70000,
+      "template": "hanniel-dp"
+    },
     "Hampers Banana Loaf::hanniel-dp": {
       "name": "Hampers Banana Loaf",
       "price": 40000,
       "template": "hanniel-dp"
     },
+    "Japchae (Custom)::hanniel-dp": {
+      "name": "Japchae (Custom)",
+      "price": 52000,
+      "template": "hanniel-dp"
+    },
+    "Kombucha (1L)::hanniel-dp": {
+      "name": "Kombucha (1L)",
+      "price": 125000,
+      "template": "hanniel-dp"
+    },
+    "Kombucha (250ml)::hanniel-dp": {
+      "name": "Kombucha (250ml)",
+      "price": 30000,
+      "template": "hanniel-dp"
+    },
+    "MSW Snowskin (6pc)::hanniel-dp": {
+      "name": "MSW Snowskin (6pc)",
+      "price": 419000,
+      "template": "hanniel-dp"
+    },
+    "MSW Snowskin Ala Carte::hanniel-dp": {
+      "name": "MSW Snowskin Ala Carte",
+      "price": 70000,
+      "template": "hanniel-dp"
+    },
+    "Madeleine Bear (2pc)::hanniel-dp": {
+      "name": "Madeleine Bear (2pc)",
+      "price": 23000,
+      "template": "hanniel-dp"
+    },
+    "Petite Bun::hanniel-dp": {
+      "name": "Petite Bun",
+      "price": 12000,
+      "template": "hanniel-dp"
+    },
+    "Petite Bun (B5G1)::hanniel-dp": {
+      "name": "Petite Bun (B5G1)",
+      "price": 60000,
+      "template": "hanniel-dp"
+    },
     "Raisin oat::hanniel-dp": {
       "name": "Raisin oat",
       "price": 70000,
+      "template": "hanniel-dp"
+    },
+    "Single Madeleine::hanniel-dp": {
+      "name": "Single Madeleine",
+      "price": 13000,
+      "template": "hanniel-dp"
+    },
+    "Snowskin Assorted 6 Var::hanniel-dp": {
+      "name": "Snowskin Assorted 6 Var",
+      "price": 239000,
       "template": "hanniel-dp"
     },
     "Cookies Jar (L)::hanniel-fi": {
@@ -313,6 +433,11 @@
     "Custom Banana Loaf::hanniel-fi": {
       "name": "Custom Banana Loaf",
       "price": 160000,
+      "template": "hanniel-fi"
+    },
+    "Custom Hampers Banana Loaf::hanniel-fi": {
+      "name": "Custom Hampers Banana Loaf",
+      "price": 45000,
       "template": "hanniel-fi"
     },
     "Custom Hampers Cookies::hanniel-fi": {
@@ -335,15 +460,205 @@
       "price": 42000,
       "template": "hanniel-fi"
     },
+    "Full Month Hampers (Cost Price)::hanniel-fi": {
+      "name": "Full Month Hampers (Cost Price)",
+      "price": 70000,
+      "template": "hanniel-fi"
+    },
     "Hampers Banana Loaf::hanniel-fi": {
       "name": "Hampers Banana Loaf",
       "price": 40000,
+      "template": "hanniel-fi"
+    },
+    "Japchae (Custom)::hanniel-fi": {
+      "name": "Japchae (Custom)",
+      "price": 52000,
+      "template": "hanniel-fi"
+    },
+    "Kombucha (1L)::hanniel-fi": {
+      "name": "Kombucha (1L)",
+      "price": 125000,
+      "template": "hanniel-fi"
+    },
+    "Kombucha (250ml)::hanniel-fi": {
+      "name": "Kombucha (250ml)",
+      "price": 30000,
+      "template": "hanniel-fi"
+    },
+    "MSW Snowskin (6pc)::hanniel-fi": {
+      "name": "MSW Snowskin (6pc)",
+      "price": 419000,
+      "template": "hanniel-fi"
+    },
+    "MSW Snowskin Ala Carte::hanniel-fi": {
+      "name": "MSW Snowskin Ala Carte",
+      "price": 70000,
+      "template": "hanniel-fi"
+    },
+    "Madeleine Bear (2pc)::hanniel-fi": {
+      "name": "Madeleine Bear (2pc)",
+      "price": 23000,
+      "template": "hanniel-fi"
+    },
+    "Petite Bun::hanniel-fi": {
+      "name": "Petite Bun",
+      "price": 12000,
+      "template": "hanniel-fi"
+    },
+    "Petite Bun (B5G1)::hanniel-fi": {
+      "name": "Petite Bun (B5G1)",
+      "price": 60000,
       "template": "hanniel-fi"
     },
     "Raisin oat::hanniel-fi": {
       "name": "Raisin oat",
       "price": 70000,
       "template": "hanniel-fi"
+    },
+    "Single Madeleine::hanniel-fi": {
+      "name": "Single Madeleine",
+      "price": 13000,
+      "template": "hanniel-fi"
+    },
+    "Snowskin Assorted 6 Var::hanniel-fi": {
+      "name": "Snowskin Assorted 6 Var",
+      "price": 239000,
+      "template": "hanniel-fi"
+    },
+    "Almond choco cookies::moon": {
+      "name": "Almond choco cookies",
+      "price": 70000,
+      "template": "moon"
+    },
+    "Banana Loaf::moon": {
+      "name": "Banana Loaf",
+      "price": 38000,
+      "template": "moon"
+    },
+    "Bulgogi Gimbap::moon": {
+      "name": "Bulgogi Gimbap",
+      "price": 78000,
+      "template": "moon"
+    },
+    "Carrot Cake::moon": {
+      "name": "Carrot Cake",
+      "price": 48000,
+      "template": "moon"
+    },
+    "Chicken Gimbap::moon": {
+      "name": "Chicken Gimbap",
+      "price": 73000,
+      "template": "moon"
+    },
+    "Cookies Jar (L)::moon": {
+      "name": "Cookies Jar (L)",
+      "price": 170000,
+      "template": "moon"
+    },
+    "Cookies Jar (S)::moon": {
+      "name": "Cookies Jar (S)",
+      "price": 129000,
+      "template": "moon"
+    },
+    "Custom Banana Loaf::moon": {
+      "name": "Custom Banana Loaf",
+      "price": 160000,
+      "template": "moon"
+    },
+    "Custom Hampers Banana Loaf::moon": {
+      "name": "Custom Hampers Banana Loaf",
+      "price": 45000,
+      "template": "moon"
+    },
+    "Custom Hampers Cookies::moon": {
+      "name": "Custom Hampers Cookies",
+      "price": 40000,
+      "template": "moon"
+    },
+    "Custom Hampers Cookies Banana::moon": {
+      "name": "Custom Hampers Cookies Banana",
+      "price": 80000,
+      "template": "moon"
+    },
+    "Custom Overnight Oats::moon": {
+      "name": "Custom Overnight Oats",
+      "price": 168000,
+      "template": "moon"
+    },
+    "Double choco oat cookies::moon": {
+      "name": "Double choco oat cookies",
+      "price": 70000,
+      "template": "moon"
+    },
+    "Double choco overnight oats::moon": {
+      "name": "Double choco overnight oats",
+      "price": 42000,
+      "template": "moon"
+    },
+    "Egg and Veggies Gimbap::moon": {
+      "name": "Egg and Veggies Gimbap",
+      "price": 70000,
+      "template": "moon"
+    },
+    "Hampers Banana Loaf::moon": {
+      "name": "Hampers Banana Loaf",
+      "price": 40000,
+      "template": "moon"
+    },
+    "Japchae::moon": {
+      "name": "Japchae",
+      "price": 60000,
+      "template": "moon"
+    },
+    "Kombucha (250ml)::moon": {
+      "name": "Kombucha (250ml)",
+      "price": 30000,
+      "template": "moon"
+    },
+    "MSW Snowskin (6pc)::moon": {
+      "name": "MSW Snowskin (6pc)",
+      "price": 419000,
+      "template": "moon"
+    },
+    "Signature Mooncake Ala Carte::moon": {
+      "name": "MSW Snowskin Ala Carte",
+      "price": 70000,
+      "template": "moon"
+    },
+    "Raisin oat cookies::moon": {
+      "name": "Raisin oat cookies",
+      "price": 70000,
+      "template": "moon"
+    },
+    "Seaweed Add-ons::moon": {
+      "name": "Seaweed Add-ons",
+      "price": 10000,
+      "template": "moon"
+    },
+    "Side Dish (P & A)::moon": {
+      "name": "Side Dish (P & A)",
+      "price": 59000,
+      "template": "moon"
+    },
+    "Classic Mooncake Assortment (6 Var)::moon": {
+      "name": "Snowskin Assorted 6 Var",
+      "price": 239000,
+      "template": "moon"
+    },
+    "Snowskin Custom Variant::moon": {
+      "name": "Snowskin Custom Variant",
+      "price": 300000,
+      "template": "moon"
+    },
+    "Strawberry overnight oats::moon": {
+      "name": "Strawberry overnight oats",
+      "price": 42000,
+      "template": "moon"
+    },
+    "Tiramisu overnight oats::moon": {
+      "name": "Tiramisu overnight oats",
+      "price": 42000,
+      "template": "moon"
     }
   }
 }

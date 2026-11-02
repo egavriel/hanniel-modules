@@ -10,6 +10,11 @@
       "price": 159000,
       "template": "christmas"
     },
+    "Custom Christmas Hampers::christmas": {
+      "name": "Custom Christmas Hampers",
+      "price": 50000,
+      "template": "christmas"
+    },
     "Double choco oat::christmas": {
       "name": "Double choco oat cookies",
       "price": 70000,
@@ -190,6 +195,11 @@
       "price": 160000,
       "template": "hanniel"
     },
+    "Custom Christmas Hampers::hanniel": {
+      "name": "Custom Christmas Hampers",
+      "price": 50000,
+      "template": "hanniel"
+    },
     "Custom Hampers Banana Loaf::hanniel": {
       "name": "Custom Hampers Banana Loaf",
       "price": 45000,
@@ -335,6 +345,11 @@
       "price": 160000,
       "template": "hanniel-dp"
     },
+    "Custom Christmas Hampers::hanniel-dp": {
+      "name": "Custom Christmas Hampers",
+      "price": 50000,
+      "template": "hanniel-dp"
+    },
     "Custom Hampers Banana Loaf::hanniel-dp": {
       "name": "Custom Hampers Banana Loaf",
       "price": 45000,
@@ -433,6 +448,11 @@
     "Custom Banana Loaf::hanniel-fi": {
       "name": "Custom Banana Loaf",
       "price": 160000,
+      "template": "hanniel-fi"
+    },
+    "Custom Christmas Hampers::hanniel-fi": {
+      "name": "Custom Christmas Hampers",
+      "price": 50000,
       "template": "hanniel-fi"
     },
     "Custom Hampers Banana Loaf::hanniel-fi": {

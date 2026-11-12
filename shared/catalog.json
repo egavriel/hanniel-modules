@@ -307,7 +307,7 @@
     },
     "Single Madeleine::hanniel": {
       "name": "Single Madeleine",
-      "price": 13000,
+      "price": 14000,
       "template": "hanniel"
     },
     "Snowskin Assorted 6 Var::hanniel": {
@@ -427,7 +427,7 @@
     },
     "Single Madeleine::hanniel-dp": {
       "name": "Single Madeleine",
-      "price": 13000,
+      "price": 14000,
       "template": "hanniel-dp"
     },
     "Snowskin Assorted 6 Var::hanniel-dp": {
@@ -537,7 +537,7 @@
     },
     "Single Madeleine::hanniel-fi": {
       "name": "Single Madeleine",
-      "price": 13000,
+      "price": 14000,
       "template": "hanniel-fi"
     },
     "Snowskin Assorted 6 Var::hanniel-fi": {

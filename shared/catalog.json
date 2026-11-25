@@ -290,6 +290,11 @@
       "price": 60000,
       "template": "hanniel"
     },
+    "Pomegranate Juice::hanniel": {
+      "name": "Pomegranate Juice",
+      "price": 60000,
+      "template": "hanniel"
+    },
     "Raisin oat::hanniel": {
       "name": "Raisin oat cookies",
       "price": 70000,
@@ -420,6 +425,11 @@
       "price": 60000,
       "template": "hanniel-dp"
     },
+    "Pomegranate Juice::hanniel-dp": {
+      "name": "Pomegranate Juice",
+      "price": 60000,
+      "template": "hanniel-dp"
+    },
     "Raisin oat::hanniel-dp": {
       "name": "Raisin oat",
       "price": 70000,
@@ -527,6 +537,11 @@
     },
     "Petite Bun (B5G1)::hanniel-fi": {
       "name": "Petite Bun (B5G1)",
+      "price": 60000,
+      "template": "hanniel-fi"
+    },
+    "Pomegranate Juice::hanniel-fi": {
+      "name": "Pomegranate Juice",
       "price": 60000,
       "template": "hanniel-fi"
     },
